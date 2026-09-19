@@ -1,0 +1,145 @@
+/* ==========================================================================
+   ESCAPE — Atmospheric Visual Layers (Rain, Warm Light, Film Grain, Vignette)
+   ========================================================================== */
+
+.viewport-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 50% 40%,
+    #131a26 0%,
+    #0c111a 45%,
+    #070a0e 100%
+  );
+}
+
+/* Canvas for dynamic rain particles and window drips */
+#rain-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 2;
+}
+
+/* Warm Interior Reading Lamp / Candle Glow (Contrast against rainy night) */
+.warm-lamp-glow {
+  position: absolute;
+  bottom: -15%;
+  left: -10%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(235, 168, 105, 0.22) 0%,
+    rgba(215, 142, 80, 0.14) 30%,
+    rgba(175, 100, 48, 0.06) 55%,
+    transparent 75%
+  );
+  filter: blur(50px);
+  z-index: 3;
+  pointer-events: none;
+  animation: lampBreathe 9s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+/* Second subtle warm reflection from bottom-right */
+.warm-lamp-glow::after {
+  content: '';
+  position: absolute;
+  right: -60vw;
+  top: 10vh;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(210, 150, 95, 0.08) 0%,
+    transparent 65%
+  );
+  filter: blur(60px);
+}
+
+/* Windowpane Condensation & Soft Blur */
+.window-mist {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(20, 28, 40, 0.1) 0%,
+    rgba(10, 14, 20, 0.4) 100%
+  );
+}
+
+/* 35mm Analog Film Grain Texture (Procedural SVG - No external downloads) */
+.film-grain {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  animation: grainFlicker 0.8s steps(6) infinite;
+  mix-blend-mode: overlay;
+}
+
+/* Deep Cinematic Edge Vignette */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 31;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 35%,
+    rgba(5, 7, 10, 0.45) 75%,
+    rgba(3, 4, 7, 0.85) 100%
+  );
+}
+
+/* Organic slow lamp breathing */
+@keyframes lampBreathe {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(1.5vw, -1.5vh) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-1vw, 1vh) scale(0.97);
+    opacity: 0.88;
+  }
+}
+
+/* Subtle frame jitter for analog film texture */
+@keyframes grainFlicker {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-1%, -1%); }
+  40% { transform: translate(1%, 0.5%); }
+  60% { transform: translate(-0.5%, 1%); }
+  80% { transform: translate(0.5%, -0.5%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* High contrast / reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .warm-lamp-glow,
+  .film-grain {
+    animation: none !important;
+  }
+}

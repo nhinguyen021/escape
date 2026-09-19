@@ -1,0 +1,1005 @@
+/* ==========================================================================
+   ESCAPE — Core Typography, Layout & Aesthetic Elements
+   ========================================================================== */
+
+:root {
+  /* Atmosphere & Color Palette */
+  --bg-deep: #080b10;
+  --bg-slate: #0e141d;
+  --rain-blue: #151d29;
+  
+  /* Amber Interior Lamp Light (Contrast) */
+  --amber-core: #e6a86e;
+  --amber-subtle: #d6945a;
+  --amber-glow-soft: rgba(230, 168, 110, 0.12);
+  --amber-glow-rich: rgba(214, 148, 90, 0.28);
+  
+  /* Text & Ink */
+  --text-parchment: #ede7dc;
+  --text-parchment-muted: #b5ada2;
+  --text-mist: #7b8898;
+  --text-shadow: rgba(0, 0, 0, 0.65);
+  
+  /* Typography Scale */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Motion & Ease */
+  --ease-poetic: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Base Setup */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-deep);
+  color: var(--text-parchment);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+/* Main Viewport Container */
+.experience-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 5vw, 4.5rem);
+  pointer-events: none; /* Allows canvas interaction behind, children re-enable */
+}
+
+.experience-wrapper * {
+  pointer-events: auto;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  animation: fadeInSlow 2.5s var(--ease-poetic) forwards;
+}
+
+.nav-brand .brand-title {
+  font-family: var(--font-sans);
+  font-size: clamp(0.72rem, 1.2vw, 0.85rem);
+  font-weight: 300;
+  letter-spacing: 0.45em;
+  color: var(--text-mist);
+  opacity: 0.8;
+  transition: opacity 0.6s ease, color 0.6s ease;
+}
+
+.nav-brand .brand-title:hover {
+  opacity: 1;
+  color: var(--text-parchment);
+}
+
+/* Sound Controller */
+.sound-toggle {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-mist);
+  font-family: var(--font-sans);
+  font-size: clamp(0.7rem, 1vw, 0.78rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-gentle);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.sound-toggle:hover {
+  border-color: rgba(230, 168, 110, 0.35);
+  color: var(--amber-core);
+  background: rgba(230, 168, 110, 0.04);
+}
+
+.sound-icon svg {
+  display: block;
+}
+
+.sound-toggle.is-playing .mute-line {
+  display: none;
+}
+
+.sound-toggle.is-playing {
+  border-color: rgba(230, 168, 110, 0.4);
+  color: var(--amber-core);
+}
+
+.sound-toggle.is-playing .wave {
+  animation: audioPulse 1.8s ease-in-out infinite alternate;
+}
+
+.sound-toggle.is-playing .wave-2 {
+  animation-delay: 0.3s;
+}
+
+/* Hero Section / Emotional Center */
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.quote-container {
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Prelude Note */
+.scene-prelude {
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 1.3vw, 0.88rem);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  color: var(--amber-subtle);
+  opacity: 0;
+  margin-bottom: 1.8rem;
+  animation: fadeInSlow 3s var(--ease-poetic) 0.5s forwards;
+}
+
+/* Core Question Typography */
+.core-question {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-style: normal;
+  line-height: 1.25;
+  color: var(--text-parchment);
+  text-shadow: 0 4px 30px var(--text-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.core-question .line-1 {
+  font-size: clamp(1.8rem, 4.6vw, 3.8rem);
+  letter-spacing: 0.16em;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: poeticRise 2.2s var(--ease-poetic) 0.8s forwards;
+}
+
+.core-question .line-2 {
+  font-size: clamp(2rem, 5.2vw, 4.3rem);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: #f7efe4;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: poeticRise 2.4s var(--ease-poetic) 1.2s forwards;
+  background: linear-gradient(135deg, #f9f3ea 0%, #ecd8c2 65%, #c5976b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Call to Action Button */
+.cta-wrapper {
+  margin-top: clamp(2.5rem, 5vh, 4rem);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: poeticRise 2s var(--ease-poetic) 1.8s forwards;
+}
+
+.subtle-cta {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.8rem 1.8rem;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform 0.6s var(--ease-poetic);
+}
+
+.cta-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  color: var(--text-parchment-muted);
+  transition: color 0.5s ease, letter-spacing 0.6s var(--ease-poetic), text-shadow 0.6s ease;
+}
+
+.cta-line {
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: rgba(230, 168, 110, 0.35);
+  margin-top: 0.45rem;
+  transition: width 0.7s var(--ease-poetic), background-color 0.5s ease;
+}
+
+.subtle-cta:hover {
+  transform: translateY(-2px);
+}
+
+.subtle-cta:hover .cta-text {
+  color: var(--amber-core);
+  letter-spacing: 0.24em;
+  text-shadow: 0 0 16px var(--amber-glow-rich);
+}
+
+.subtle-cta:hover .cta-line {
+  width: 56px;
+  background-color: var(--amber-core);
+}
+
+/* Gentle hint below CTA */
+.experience-hint {
+  margin-top: clamp(1.5rem, 3vh, 2.5rem);
+  font-size: clamp(0.68rem, 1vw, 0.76rem);
+  font-weight: 200;
+  letter-spacing: 0.16em;
+  color: var(--text-mist);
+  opacity: 0;
+  animation: fadeInSlow 2.5s var(--ease-poetic) 2.2s forwards;
+}
+
+/* Footer Section */
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: clamp(0.68rem, 1vw, 0.78rem);
+  letter-spacing: 0.14em;
+  color: var(--text-mist);
+  opacity: 0;
+  animation: fadeInSlow 2.5s var(--ease-poetic) 2.4s forwards;
+}
+
+.subtle-meta {
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  color: rgba(237, 231, 220, 0.5);
+}
+
+.subtle-date {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+}
+
+/* Soft Transition Curtain on Enter */
+.transition-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: #06080b;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.8s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.transition-curtain.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.curtain-inner {
+  text-align: center;
+  padding: 2rem;
+}
+
+.trans-message {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 300;
+  color: var(--amber-core);
+  letter-spacing: 0.12em;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 1.4s var(--ease-poetic) 0.6s;
+}
+
+.transition-curtain.active .trans-message {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Keyframe Animations */
+@keyframes fadeInSlow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.85;
+  }
+}
+
+@keyframes poeticRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes audioPulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .experience-wrapper {
+    padding: 1.5rem 1.2rem;
+  }
+  
+  .core-question .line-1 {
+    letter-spacing: 0.12em;
+  }
+  
+  .core-question .line-2 {
+    letter-spacing: 0.05em;
+  }
+  
+  .bottom-bar {
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+  }
+}
+
+/* ==========================================================================
+   SCENE 2 — The Quiet Room & Desk by the Rain
+   ========================================================================== */
+
+.room-scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.2rem, 3vw, 2.5rem) clamp(1.2rem, 4vw, 3.5rem);
+  background: radial-gradient(
+    ellipse at 40% 60%,
+    rgba(14, 19, 27, 0.88) 0%,
+    rgba(8, 11, 16, 0.94) 60%,
+    rgba(5, 7, 10, 0.98) 100%
+  );
+  transition: opacity 2s var(--ease-poetic);
+  overflow: hidden;
+}
+
+.room-scene.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Room Top Navigation Bar */
+.room-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  z-index: 20;
+}
+
+.room-nav-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-mist);
+  font-family: var(--font-sans);
+  font-size: clamp(0.7rem, 1vw, 0.78rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-gentle);
+  backdrop-filter: blur(8px);
+}
+
+.room-nav-btn:hover {
+  border-color: rgba(230, 168, 110, 0.35);
+  color: var(--amber-core);
+  background: rgba(230, 168, 110, 0.04);
+}
+
+.room-scene-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+  letter-spacing: 0.12em;
+  color: var(--amber-subtle);
+  opacity: 0.75;
+}
+
+/* Room Stage & Composition */
+.room-stage {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Background Windowpane Frame */
+.room-window-backdrop {
+  position: absolute;
+  top: 4%;
+  left: 3%;
+  width: min(340px, 42vw);
+  height: min(380px, 48vh);
+  border: 4px solid #141a22;
+  border-radius: 4px;
+  background: rgba(12, 17, 24, 0.35);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 10, 15, 0.7);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.window-mullion {
+  position: absolute;
+  background-color: #121820;
+}
+
+.window-mullion.horizontal {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: translateY(-50%);
+}
+
+.window-mullion.vertical {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.window-glass-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(60, 85, 115, 0.15) 0%,
+    transparent 75%
+  );
+}
+
+/* The Wooden Desk Surface */
+.desk-surface {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  min-height: min(480px, 65vh);
+  background: linear-gradient(
+    180deg,
+    #130e0b 0%,
+    #1c1511 25%,
+    #251b14 65%,
+    #19120e 100%
+  );
+  border-top: 1px solid rgba(230, 168, 110, 0.15);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 
+    0 -10px 40px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 2.5rem 3rem 4rem 3rem;
+  z-index: 2;
+  overflow: visible;
+}
+
+/* Wood Grain Subtle Texture */
+.desk-wood-grain {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 40px,
+    rgba(0, 0, 0, 0.06) 40px,
+    rgba(0, 0, 0, 0.06) 80px
+  );
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Warm pool of light directly under and around the lamp */
+.desk-lamp-pool {
+  position: absolute;
+  bottom: 12%;
+  left: 12%;
+  width: 440px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(235, 168, 105, 0.28) 0%,
+    rgba(215, 142, 80, 0.16) 35%,
+    rgba(160, 95, 45, 0.06) 60%,
+    transparent 80%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 1;
+  animation: lampBreathe 8s ease-in-out infinite alternate;
+}
+
+/* Desk Items Positioning */
+.desk-item {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.4s var(--ease-poetic);
+}
+
+/* 1. Vintage Amber Lamp */
+.desk-lamp {
+  width: clamp(100px, 15vw, 150px);
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
+}
+
+.lamp-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.lamp-light-cone {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 380px;
+  clip-path: polygon(42% 0%, 58% 0%, 100% 100%, 0% 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 230, 180, 0.25) 0%,
+    rgba(230, 165, 100, 0.12) 40%,
+    transparent 90%
+  );
+  pointer-events: none;
+  filter: blur(12px);
+  z-index: -1;
+  animation: lampBreathe 7s ease-in-out infinite alternate;
+}
+
+/* 2. Vase of Dried Flowers */
+.vase-container {
+  width: clamp(75px, 11vw, 115px);
+  margin-bottom: 1.2rem;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.6));
+}
+
+.vase-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 3. The Open Book */
+.open-book {
+  width: clamp(140px, 22vw, 210px);
+  height: clamp(95px, 14vw, 140px);
+  display: flex;
+  position: relative;
+  margin-bottom: 1rem;
+  perspective: 600px;
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.75));
+  cursor: default;
+}
+
+.book-shadow {
+  position: absolute;
+  bottom: -8px;
+  left: 5%;
+  right: 5%;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7), transparent 70%);
+  filter: blur(4px);
+}
+
+.book-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #1f1814, #3a2e26, #1f1814);
+  z-index: 4;
+}
+
+.book-page {
+  flex: 1;
+  background: #eae2d3;
+  padding: 0.8rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 2px 5px 5px 2px;
+  box-shadow: inset 0 0 12px rgba(90, 70, 50, 0.18);
+  position: relative;
+}
+
+.book-page.page-left {
+  background: linear-gradient(90deg, #dfd7c7 0%, #ece5d7 90%, #d8cebd 100%);
+  border-radius: 5px 2px 2px 5px;
+}
+
+.book-page.page-right {
+  background: linear-gradient(90deg, #d8cebd 0%, #ece5d7 10%, #e2d9ca 100%);
+}
+
+.page-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.line-sm {
+  height: 2px;
+  background-color: rgba(90, 75, 60, 0.22);
+  border-radius: 1px;
+}
+
+.w-40 { width: 40%; }
+.w-60 { width: 60%; }
+.w-70 { width: 70%; }
+.w-75 { width: 75%; }
+.w-80 { width: 80%; }
+.w-85 { width: 85%; }
+.w-90 { width: 90%; }
+.w-92 { width: 92%; }
+.w-95 { width: 95%; }
+
+.page-num {
+  font-family: var(--font-serif);
+  font-size: 0.65rem;
+  color: rgba(90, 75, 60, 0.45);
+  text-align: center;
+}
+
+/* 4. The Handwritten Letter (Clickable Interactive Focus) */
+.interactive-letter {
+  width: clamp(125px, 18vw, 175px);
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 0.8rem;
+  transform: rotate(-3deg);
+  transition: transform 0.5s var(--ease-poetic), filter 0.5s ease;
+}
+
+.letter-shadow {
+  position: absolute;
+  bottom: -6px;
+  left: 6%;
+  right: 6%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8), transparent 70%);
+  filter: blur(4px);
+}
+
+.letter-sheet {
+  background: linear-gradient(135deg, #f4eddf 0%, #ebe2d0 60%, #ded3be 100%);
+  border-radius: 3px;
+  padding: 1rem 0.9rem 1.3rem 0.9rem;
+  box-shadow: 
+    0 10px 24px rgba(0, 0, 0, 0.65),
+    inset 0 0 15px rgba(120, 95, 65, 0.15);
+  position: relative;
+  border: 1px solid rgba(180, 150, 110, 0.2);
+  transition: border-color 0.4s ease, box-shadow 0.5s var(--ease-poetic);
+}
+
+.interactive-letter:hover,
+.interactive-letter:focus-visible {
+  transform: rotate(0deg) translateY(-6px);
+}
+
+.interactive-letter:hover .letter-sheet,
+.interactive-letter:focus-visible .letter-sheet {
+  border-color: rgba(230, 168, 110, 0.6);
+  box-shadow: 
+    0 16px 32px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(230, 168, 110, 0.25);
+}
+
+.letter-wax-seal {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #943a3a 0%, #682222 70%, #471515 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.script-snippet {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.72rem, 1.1vw, 0.82rem);
+  line-height: 1.3;
+  color: #43382f;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.6rem;
+}
+
+.letter-faint-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.faint-stroke {
+  height: 1.5px;
+  background-color: rgba(90, 75, 60, 0.25);
+  border-radius: 1px;
+}
+
+.letter-interact-prompt {
+  margin-top: 0.9rem;
+  text-align: right;
+}
+
+.letter-interact-prompt span {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: var(--amber-subtle);
+  border-bottom: 1px dotted var(--amber-subtle);
+  transition: color 0.3s ease;
+}
+
+.interactive-letter:hover .letter-interact-prompt span {
+  color: #8c4a16;
+}
+
+/* Whisper text at bottom of stage */
+.room-whisper {
+  margin-top: 1.5rem;
+  font-size: clamp(0.7rem, 1vw, 0.78rem);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--text-mist);
+  opacity: 0.65;
+  text-align: center;
+}
+
+/* ==========================================================================
+   INTERACTIVE LETTER MODAL (The Unfolded Letter)
+   ========================================================================== */
+
+.letter-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-poetic);
+}
+
+.letter-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.letter-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 8, 12, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.letter-paper-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 580px;
+  background: linear-gradient(145deg, #f7f1e6 0%, #eee5d3 65%, #e2d6bf 100%);
+  color: #2b231c;
+  border-radius: 4px;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1.8rem, 5vw, 3.2rem);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(226, 164, 104, 0.12),
+    inset 0 0 35px rgba(130, 100, 70, 0.1);
+  border: 1px solid rgba(215, 185, 145, 0.4);
+  transform: scale(0.94) translateY(18px);
+  transition: transform 0.6s var(--ease-poetic);
+}
+
+.letter-modal.active .letter-paper-wrapper {
+  transform: scale(1) translateY(0);
+}
+
+.close-letter {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.4rem;
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: #7d6e61;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.close-letter:hover {
+  color: #2b231c;
+}
+
+.letter-date {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #7d6e61;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(125, 110, 97, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.letter-body {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 1.8vw, 1.22rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: #29211a;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.salutation {
+  font-style: italic;
+  font-weight: 500;
+  color: #4a3a2e;
+}
+
+.closing {
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.signature {
+  display: inline-block;
+  margin-top: 0.3rem;
+  color: #72421c;
+}
+
+.letter-footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: #8c7b6d;
+}
+
+/* Mobile Responsiveness for Room Scene */
+@media (max-width: 768px) {
+  .room-scene {
+    padding: 1.2rem;
+  }
+
+  .room-window-backdrop {
+    top: 2%;
+    left: 2%;
+    width: 140px;
+    height: 180px;
+  }
+
+  .desk-surface {
+    padding: 1.5rem 1rem 2.5rem 1rem;
+    min-height: 380px;
+    gap: 0.6rem;
+    justify-content: space-between;
+  }
+
+  .desk-lamp-pool {
+    width: 260px;
+    height: 200px;
+    left: -20px;
+  }
+
+  .lamp-light-cone {
+    width: 220px;
+    height: 260px;
+  }
+
+  .vase-container {
+    width: 65px;
+    margin-bottom: 0.6rem;
+  }
+
+  .open-book {
+    width: 110px;
+    height: 80px;
+    margin-bottom: 0.5rem;
+  }
+
+  .interactive-letter {
+    width: 105px;
+    margin-bottom: 0.4rem;
+  }
+
+  .letter-paper-wrapper {
+    padding: 2rem 1.4rem;
+  }
+}
+
