@@ -479,7 +479,7 @@ html, body {
   align-items: center;
 }
 
-/* Background Windowpane Frame */
+/* Background Windowpane Frame (Interactive) */
 .room-window-backdrop {
   position: absolute;
   top: 4%;
@@ -491,13 +491,39 @@ html, body {
   background: rgba(12, 17, 24, 0.35);
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 10, 15, 0.7);
   overflow: hidden;
-  pointer-events: none;
   z-index: 1;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s var(--ease-poetic);
+}
+
+.room-window-backdrop.interactive-window {
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+}
+
+.room-window-backdrop.interactive-window:hover,
+.room-window-backdrop.interactive-window:focus-visible {
+  border-color: rgba(138, 180, 248, 0.45);
+  box-shadow: 
+    inset 0 0 45px rgba(80, 130, 200, 0.35), 
+    0 0 30px rgba(138, 180, 248, 0.2);
+  transform: scale(1.008);
+}
+
+.room-window-backdrop.interactive-window:hover .window-glass-glow {
+  background: radial-gradient(
+    circle at 35% 25%,
+    rgba(120, 170, 240, 0.3) 0%,
+    rgba(70, 110, 165, 0.15) 50%,
+    transparent 80%
+  );
+  transition: background 0.6s ease;
 }
 
 .window-mullion {
   position: absolute;
   background-color: #121820;
+  z-index: 4;
 }
 
 .window-mullion.horizontal {
@@ -524,6 +550,143 @@ html, body {
     rgba(60, 85, 115, 0.15) 0%,
     transparent 75%
   );
+  transition: background 0.8s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Condensation Overlay & Wiped Circle */
+.window-condensation-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: radial-gradient(
+    ellipse at 60% 45%,
+    rgba(175, 200, 225, 0.22) 0%,
+    rgba(130, 160, 195, 0.38) 70%,
+    rgba(90, 120, 155, 0.45) 100%
+  );
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Wiped Circle Mask effect */
+.room-window-backdrop.interactive-window.is-wiped .window-condensation-overlay {
+  opacity: 1;
+  mask-image: radial-gradient(circle 52px at 58% 46%, transparent 0%, transparent 92%, black 100%);
+  -webkit-mask-image: radial-gradient(circle 52px at 58% 46%, transparent 0%, transparent 92%, black 100%);
+}
+
+/* Distant Warm Light / Moonlit Beacon */
+.distant-warm-beacon {
+  position: absolute;
+  top: 46%;
+  left: 58%;
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 1.4s ease 0.4s, transform 2s var(--ease-poetic);
+}
+
+.beacon-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff4e0;
+  box-shadow: 
+    0 0 12px #fedb9b,
+    0 0 24px rgba(254, 200, 120, 0.8);
+}
+
+.beacon-bloom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 140, 0.35) 0%,
+    rgba(240, 175, 90, 0.15) 45%,
+    transparent 70%
+  );
+  animation: beaconPulse 4s ease-in-out infinite alternate;
+}
+
+.room-window-backdrop.interactive-window.is-wiped .distant-warm-beacon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Subtle prompt and transient whisper caption */
+.window-interact-prompt {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: var(--amber-subtle);
+  background: rgba(8, 12, 18, 0.75);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(230, 168, 110, 0.25);
+  backdrop-filter: blur(6px);
+  opacity: 0.75;
+  transition: all 0.4s var(--ease-gentle);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.room-window-backdrop.interactive-window:hover .window-interact-prompt,
+.room-window-backdrop.interactive-window:focus-visible .window-interact-prompt {
+  opacity: 1;
+  color: #c0daf8;
+  border-color: rgba(138, 180, 248, 0.6);
+  box-shadow: 0 0 14px rgba(138, 180, 248, 0.25);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.room-window-backdrop.interactive-window.is-wiped .window-interact-prompt {
+  opacity: 0;
+}
+
+/* Transient Cinematic Whisper Caption (2-3 seconds) */
+.window-whisper-caption {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(0.78rem, 1.2vw, 0.88rem);
+  letter-spacing: 0.08em;
+  color: #e2ecf8;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 6;
+  transition: opacity 0.8s ease, transform 0.8s var(--ease-poetic);
+}
+
+.window-whisper-caption.visible {
+  opacity: 0.95;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes beaconPulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
 }
 
 /* The Wooden Desk Surface */
@@ -641,7 +804,7 @@ html, body {
   display: block;
 }
 
-/* 3. The Open Book */
+/* 3. The Open Book (Interactive) */
 .open-book {
   width: clamp(140px, 22vw, 210px);
   height: clamp(95px, 14vw, 140px);
@@ -650,7 +813,20 @@ html, body {
   margin-bottom: 1rem;
   perspective: 600px;
   filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.75));
-  cursor: default;
+  transition: transform 0.5s var(--ease-poetic), filter 0.5s ease;
+}
+
+.open-book.interactive-book {
+  cursor: pointer;
+  outline: none;
+}
+
+.open-book.interactive-book:hover,
+.open-book.interactive-book:focus-visible {
+  transform: translateY(-5px) rotate(0.5deg);
+  filter: 
+    drop-shadow(0 18px 26px rgba(0, 0, 0, 0.85)) 
+    drop-shadow(0 0 14px rgba(230, 168, 110, 0.22));
 }
 
 .book-shadow {
@@ -684,6 +860,11 @@ html, body {
   border-radius: 2px 5px 5px 2px;
   box-shadow: inset 0 0 12px rgba(90, 70, 50, 0.18);
   position: relative;
+  transition: background-color 0.4s ease;
+}
+
+.open-book.interactive-book:hover .book-page {
+  box-shadow: inset 0 0 14px rgba(180, 140, 90, 0.25);
 }
 
 .book-page.page-left {
@@ -716,6 +897,27 @@ html, body {
 .w-90 { width: 90%; }
 .w-92 { width: 92%; }
 .w-95 { width: 95%; }
+
+.book-interact-prompt {
+  margin-top: 0.25rem;
+  text-align: right;
+}
+
+.book-interact-prompt span {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: #8c7255;
+  border-bottom: 1px dotted rgba(140, 114, 85, 0.6);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.open-book.interactive-book:hover .book-interact-prompt span,
+.open-book.interactive-book:focus-visible .book-interact-prompt span {
+  color: #723e16;
+  border-color: #723e16;
+}
 
 .page-num {
   font-family: var(--font-serif);
@@ -834,9 +1036,10 @@ html, body {
 }
 
 /* ==========================================================================
-   INTERACTIVE LETTER MODAL (The Unfolded Letter)
+   INTERACTIVE MEMORY MODALS (Window, Book, Letter)
    ========================================================================== */
 
+.memory-modal,
 .letter-modal {
   position: fixed;
   inset: 0;
@@ -850,19 +1053,22 @@ html, body {
   transition: opacity 0.6s var(--ease-poetic);
 }
 
+.memory-modal.active,
 .letter-modal.active {
   opacity: 1;
   pointer-events: auto;
 }
 
+.modal-backdrop,
 .letter-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(6, 8, 12, 0.78);
+  background: rgba(6, 8, 12, 0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
+.memory-card-wrapper,
 .letter-paper-wrapper {
   position: relative;
   z-index: 2;
@@ -881,10 +1087,50 @@ html, body {
   transition: transform 0.6s var(--ease-poetic);
 }
 
+.memory-modal.active .memory-card-wrapper,
 .letter-modal.active .letter-paper-wrapper {
   transform: scale(1) translateY(0);
 }
 
+/* Specific theme for Window Memory Card */
+.window-card {
+  background: linear-gradient(145deg, #f2f5f8 0%, #e3ebf2 60%, #d4e0eb 100%);
+  border: 1px solid rgba(160, 185, 210, 0.45);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(120, 160, 200, 0.12),
+    inset 0 0 35px rgba(80, 110, 140, 0.08);
+}
+
+.memory-poetic-lead {
+  font-style: italic;
+  color: #1e2c3c;
+  line-height: 1.65;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+}
+
+.memory-whisper-highlight {
+  font-style: italic;
+  color: #8c5324;
+  border-left: 2px solid rgba(140, 83, 36, 0.4);
+  padding-left: 0.9rem;
+  margin-top: 0.6rem;
+}
+
+/* Specific theme for Book Memory Card */
+.book-card {
+  background: linear-gradient(145deg, #fbf7ee 0%, #f2ebd9 60%, #e6dac3 100%);
+  border: 1px solid rgba(215, 185, 145, 0.45);
+}
+
+.memory-quote-passage {
+  font-style: italic;
+  color: #34281e;
+  line-height: 1.75;
+}
+
+/* Common Modal Elements */
+.close-memory-btn,
 .close-letter {
   position: absolute;
   top: 1.2rem;
@@ -900,10 +1146,12 @@ html, body {
   transition: color 0.3s ease;
 }
 
+.close-memory-btn:hover,
 .close-letter:hover {
   color: #2b231c;
 }
 
+.memory-header,
 .letter-date {
   font-family: var(--font-serif);
   font-style: italic;
@@ -914,10 +1162,11 @@ html, body {
   padding-bottom: 0.5rem;
 }
 
+.memory-body,
 .letter-body {
   font-family: var(--font-serif);
   font-size: clamp(1.05rem, 1.8vw, 1.22rem);
-  line-height: 1.7;
+  line-height: 1.75;
   letter-spacing: 0.02em;
   color: #29211a;
   display: flex;
@@ -942,6 +1191,7 @@ html, body {
   color: #72421c;
 }
 
+.memory-footer,
 .letter-footer {
   margin-top: 2rem;
   text-align: center;
@@ -998,8 +1248,103 @@ html, body {
     margin-bottom: 0.4rem;
   }
 
-  .letter-paper-wrapper {
+  .letter-paper-wrapper,
+  .memory-card-wrapper {
     padding: 2rem 1.4rem;
+  }
+
+  .window-interact-prompt {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.55rem;
+    bottom: 6px;
+  }
+
+  .book-interact-prompt span {
+    font-size: 0.52rem;
   }
 }
 
+/* ==========================================================================\n+   ESCAPE SELECTION — atmosphere, not navigation cards\n+   ========================================================================== */
+.selection-scene,
+.preview-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 16;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 5vw, 5rem);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 75%, rgba(23, 30, 42, .82), rgba(4, 7, 11, .98) 65%);
+  transition: opacity 1s var(--ease-poetic);
+}
+.selection-scene::before,
+.preview-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 25%, rgba(185, 138, 88, .06), transparent 70%);
+  animation: selectionDrift 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.selection-scene.active,
+.preview-scene.active { opacity: 1; pointer-events: auto; }
+.selection-inner { position: relative; z-index: 1; width: min(760px, 100%); }
+.selection-kicker { margin: 0 0 1.1rem; color: var(--amber-subtle); font: italic 1rem var(--font-serif); letter-spacing: .16em; text-align: center; }
+.selection-inner h2 { margin: 0 0 clamp(2.5rem, 7vh, 4.5rem); color: #eee7dc; font: 300 clamp(2.2rem, 6vw, 4.8rem)/.95 var(--font-serif); letter-spacing: -.025em; text-align: center; }
+.destination-list { display: grid; }
+.destination {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.15rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(232, 225, 211, .12);
+  color: #ddd5c8;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: padding .6s var(--ease-poetic), color .4s ease, text-shadow .6s ease;
+}
+.destination::before { content: ''; position: absolute; left: -1rem; right: -1rem; top: 0; bottom: 0; opacity: 0; background: radial-gradient(ellipse at 25% 50%, var(--destination-glow), transparent 65%); transition: opacity .6s ease; pointer-events: none; }
+.destination span { position: relative; z-index: 1; font: 300 clamp(1.35rem, 3vw, 2.25rem) var(--font-serif); }
+.destination i { position: relative; z-index: 1; color: rgba(216, 207, 195, .55); font: italic .82rem var(--font-serif); letter-spacing: .06em; }
+.destination:hover,
+.destination:focus-visible { padding-left: 1.1rem; color: #fff7ea; outline: none; text-shadow: 0 0 22px var(--destination-glow); }
+.destination:hover::before,
+.destination:focus-visible::before { opacity: 1; }
+.rainy { --destination-glow: rgba(128, 169, 211, .25); }
+.sea { --destination-glow: rgba(81, 158, 179, .24); }
+.quiet { --destination-glow: rgba(146, 170, 126, .2); }
+.city { --destination-glow: rgba(202, 142, 83, .2); }
+.impossible { --destination-glow: rgba(163, 130, 201, .22); }
+.quiet-back { position: absolute; top: clamp(1.3rem, 4vw, 3rem); left: clamp(1.3rem, 4vw, 3rem); z-index: 2; border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 2.4rem; height: 2.4rem; color: var(--text-mist); background: rgba(10,13,18,.35); cursor: pointer; transition: color .3s, border-color .3s; }
+.quiet-back:hover { color: var(--amber-core); border-color: rgba(230,168,110,.45); }
+.preview-copy { position: relative; z-index: 1; text-align: center; color: #eee7dc; }
+.preview-copy p { margin: 0 0 1rem; font: 300 clamp(2rem, 6vw, 5rem) var(--font-serif); }
+.preview-copy span { color: var(--amber-subtle); font: italic 1rem var(--font-serif); letter-spacing: .12em; }
+.preview-scene.sea { background: radial-gradient(ellipse at 50% 90%, #123747, #050b12 68%); }
+.preview-scene.quiet { background: radial-gradient(ellipse at 50% 90%, #263025, #070b08 68%); }
+.preview-scene.city { background: radial-gradient(ellipse at 50% 90%, #392316, #090707 68%); }
+.preview-scene.impossible { background: radial-gradient(ellipse at 50% 90%, #261c3a, #07050d 68%); }
+
+.room-actions { display: flex; justify-content: center; gap: 1.4rem; margin-top: 1.2rem; }
+.stay-here, .escape-again-bottom { border: 0; padding: .45rem 0; color: var(--text-mist); background: transparent; cursor: pointer; font: 300 .68rem var(--font-sans); letter-spacing: .16em; transition: color .35s ease, opacity .35s ease; }
+.stay-here { color: var(--amber-subtle); border-bottom: 1px solid rgba(230, 168, 110, .4); }
+.stay-here:hover, .escape-again-bottom:hover { color: #fff4e2; }
+.room-scene.is-staying .room-nav,
+.room-scene.is-staying .room-actions,
+.room-scene.is-staying .room-whisper { opacity: 0; pointer-events: none; transition: opacity 1.4s ease; }
+.room-scene.is-staying .desk-surface { transform: scale(1.025); transition: transform 2.5s var(--ease-poetic); }
+.open-book.is-open .flip-sheet { animation: pageTurn 1.5s var(--ease-poetic) forwards; }
+.open-book.is-open .sheet-2 { animation-delay: .24s; }
+.open-book.is-open .pressed-flower-revelation { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.pressed-flower-revelation { position: absolute; top: 52%; left: 72%; z-index: 6; width: 52px; text-align: center; opacity: 0; transform: translate(-50%, -45%) scale(.8); transition: opacity .7s ease .9s, transform .7s var(--ease-poetic) .9s; }
+.pressed-flower-svg { width: 40px; }
+.penciled-memory-note { margin: -4px 0 0; color: #80634d; font: italic .5rem var(--font-serif); white-space: nowrap; }
+@keyframes pageTurn { from { transform: rotateY(0deg); opacity: 1; } to { transform: rotateY(-175deg); opacity: .15; } }
+@keyframes selectionDrift { from { transform: translateX(-3%) translateY(1%); } to { transform: translateX(3%) translateY(-1%); } }
+@media (max-width: 600px) { .destination { grid-template-columns: 1fr; gap: .25rem; padding: .9rem 0; } .destination i { font-size: .7rem; } .room-actions { gap: .8rem; } }

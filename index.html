@@ -66,8 +66,8 @@
         </h1>
 
         <div class="cta-wrapper">
-          <button id="enter-btn" class="subtle-cta" aria-label="Bước vào chốn bình yên">
-            <span class="cta-text">bước vào</span>
+          <button id="enter-btn" class="subtle-cta" aria-label="Chọn một chốn để trốn vào">
+            <span class="cta-text">ESCAPE →</span>
             <span class="cta-line"></span>
           </button>
         </div>
@@ -83,26 +83,75 @@
     </footer>
   </div>
 
+  <!-- Scene 2: an emotional, atmospheric destination selection -->
+  <section id="selection-scene" class="selection-scene" aria-hidden="true">
+    <button id="selection-back" class="quiet-back" aria-label="Quay lại màn hình đầu">←</button>
+    <div class="selection-inner">
+      <p class="selection-kicker">chọn một khoảng lặng</p>
+      <h2>Where would you go?</h2>
+      <div class="destination-list" role="list">
+        <button class="destination rainy" data-destination="rainy" role="listitem"><span>Somewhere Rainy</span><i>mưa rơi ngoài khung cửa</i></button>
+        <button class="destination sea" data-destination="sea" role="listitem"><span>Somewhere by the Sea</span><i>một đường chân trời rộng mở</i></button>
+        <button class="destination quiet" data-destination="quiet" role="listitem"><span>Somewhere Quiet</span><i>nơi mọi thanh âm chậm lại</i></button>
+        <button class="destination city" data-destination="city" role="listitem"><span>Somewhere in the City</span><i>những ô cửa còn sáng</i></button>
+        <button class="destination impossible" data-destination="impossible" role="listitem"><span>Somewhere Impossible</span><i>một nơi chỉ có trong giấc mơ</i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- A small atmospheric holding space for worlds not written yet -->
+  <section id="preview-scene" class="preview-scene" aria-hidden="true">
+    <button id="preview-back" class="quiet-back" aria-label="Quay lại danh sách chốn trốn">←</button>
+    <div class="preview-copy">
+      <p id="preview-title"></p>
+      <span>đang được viết dở...</span>
+    </div>
+  </section>
+
   <!-- Scene 2: The Quiet Room at Night -->
   <section id="room-scene" class="room-scene" aria-hidden="true">
     <!-- Scene Navigation -->
     <div class="room-nav">
-      <button id="back-to-window" class="room-nav-btn" aria-label="Quay lại bên khung cửa sổ">
+      <button id="escape-again" class="room-nav-btn" aria-label="Chọn một chốn khác">
         <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
-        <span>về bên khung cửa</span>
+        <span>trốn đi lần nữa</span>
       </button>
-      <div class="room-scene-title">góc bàn bên khung cửa mưa</div>
+      <div class="room-scene-title">Somewhere Rainy</div>
     </div>
 
     <!-- The Intimate Desk Still-Life Stage -->
     <div class="room-stage">
-      <!-- Background Windowpane -->
-      <div class="room-window-backdrop">
+      <!-- Background Windowpane (Interactive Animation) -->
+      <div class="room-window-backdrop interactive-window" id="interactive-window" role="button" tabindex="0" aria-label="Chạm vào ô kính ngắm mưa" title="Nhấp để lau ô kính">
+        <!-- Structural Window Mullions -->
         <div class="window-mullion horizontal"></div>
         <div class="window-mullion vertical"></div>
+        
+        <!-- Cold Blue Ambient Night Glow -->
         <div class="window-glass-glow"></div>
+
+        <!-- Condensation & Wiped Circle Layer -->
+        <div class="window-condensation-overlay">
+          <!-- Distant warm light revealed through the wiped circle -->
+          <div class="distant-warm-beacon" aria-hidden="true">
+            <div class="beacon-core"></div>
+            <div class="beacon-bloom"></div>
+          </div>
+          <!-- Wiped Circle Aperture -->
+          <div class="window-wipe-circle" aria-hidden="true"></div>
+        </div>
+
+        <!-- Hover / Idle Prompt -->
+        <div class="window-interact-prompt">
+          <span>chạm vào ô kính</span>
+        </div>
+
+        <!-- Transient Cinematic Whisper Caption (Fades away after 2.5s) -->
+        <div class="window-whisper-caption" id="window-caption" aria-live="polite">
+          <span>ngoài kia, một đốm sáng xa xôi...</span>
+        </div>
       </div>
 
       <!-- The Wooden Desk Surface -->
@@ -146,49 +195,41 @@
           <svg class="vase-svg" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Dried Botanical Stems -->
             <g class="dried-stems">
-              <!-- Wild Grass Stems -->
               <path d="M60 130 Q50 65 32 18" stroke="#786c5c" stroke-width="1.2" stroke-linecap="round"/>
               <path d="M60 130 Q65 70 78 22" stroke="#877a68" stroke-width="1.4" stroke-linecap="round"/>
               <path d="M60 130 Q58 50 56 10" stroke="#685d4f" stroke-width="1.3" stroke-linecap="round"/>
               <path d="M60 130 Q72 85 92 45" stroke="#7d7160" stroke-width="1.2" stroke-linecap="round"/>
               <path d="M60 130 Q45 80 24 50" stroke="#6e6253" stroke-width="1.2" stroke-linecap="round"/>
               
-              <!-- Dried Floral Buds / Lavender Specks -->
-              <!-- Left branch -->
               <ellipse cx="32" cy="18" rx="2.5" ry="4.5" transform="rotate(-25 32 18)" fill="#8e8172"/>
               <ellipse cx="36" cy="28" rx="2.2" ry="4" transform="rotate(-20 36 28)" fill="#a19383"/>
               <ellipse cx="40" cy="40" rx="2" ry="3.5" transform="rotate(-15 40 40)" fill="#786a5a"/>
-              <!-- Center tall stem -->
               <ellipse cx="56" cy="10" rx="2.5" ry="5" fill="#a89a8a"/>
               <ellipse cx="56" cy="22" rx="2.4" ry="4.5" fill="#938474"/>
               <ellipse cx="57" cy="34" rx="2.2" ry="4" fill="#7d6f60"/>
-              <!-- Right branch -->
               <ellipse cx="78" cy="22" rx="2.5" ry="4.5" transform="rotate(22 78 22)" fill="#9e9080"/>
               <ellipse cx="74" cy="34" rx="2.3" ry="4" transform="rotate(18 74 34)" fill="#b3a595"/>
               <ellipse cx="70" cy="46" rx="2.1" ry="3.5" transform="rotate(12 70 46)" fill="#857767"/>
-              <!-- Far right branch -->
               <ellipse cx="92" cy="45" rx="2.2" ry="4" transform="rotate(35 92 45)" fill="#7f7161"/>
               <ellipse cx="86" cy="56" rx="2" ry="3.5" transform="rotate(28 86 56)" fill="#968878"/>
-              <!-- Far left branch -->
               <ellipse cx="24" cy="50" rx="2.2" ry="4" transform="rotate(-35 24 50)" fill="#776a5b"/>
             </g>
 
-            <!-- Ceramic Vase Body (Matte stoneware) -->
-            <!-- Shadow under vase -->
+            <!-- Ceramic Vase Body -->
             <ellipse cx="60" cy="210" rx="28" ry="7" fill="#080706" opacity="0.6"/>
-            <!-- Vase Silhouette -->
             <path d="M48 115 C48 110 72 110 72 115 L70 135 C88 152 90 195 82 206 C76 212 44 212 38 206 C30 195 32 152 50 135 Z" 
                   fill="#2b241e" stroke="#4a3e35" stroke-width="1"/>
-            <!-- Vase Highlight & Rim -->
             <ellipse cx="60" cy="115" rx="12" ry="3" fill="#3a3028" stroke="#5a4d42" stroke-width="0.8"/>
             <path d="M42 165 C41 185 45 198 52 204" stroke="#685647" stroke-width="1.8" stroke-linecap="round" opacity="0.65"/>
           </svg>
         </div>
 
-        <!-- 3. The Open Book -->
-        <div class="desk-item open-book" title="Cuốn sách mở những trang văn tĩnh lặng">
+        <!-- 3. The Open Book (Interactive 3D Page Turn & Pressed Flower) -->
+        <div class="desk-item open-book interactive-book" id="interactive-book" role="button" tabindex="0" aria-label="Lần giở trang sách" title="Nhấp để lật trang sách">
           <div class="book-shadow"></div>
           <div class="book-spine"></div>
+          
+          <!-- Left Page (Base) -->
           <div class="book-page page-left">
             <div class="page-lines">
               <span class="line-sm w-85"></span>
@@ -199,10 +240,49 @@
               <span class="line-sm w-80"></span>
               <span class="line-sm w-60"></span>
             </div>
-            <span class="page-num">48</span>
+            <span class="page-num" id="page-num-left">48</span>
           </div>
+
+          <!-- 3D Turning Sheet 1 -->
+          <div class="flip-sheet sheet-1" aria-hidden="true">
+            <div class="flip-face front">
+              <div class="page-lines">
+                <span class="line-sm w-90"></span>
+                <span class="line-sm w-80"></span>
+                <span class="line-sm w-85"></span>
+                <span class="line-sm w-70"></span>
+              </div>
+            </div>
+            <div class="flip-face back">
+              <div class="page-lines">
+                <span class="line-sm w-75"></span>
+                <span class="line-sm w-85"></span>
+                <span class="line-sm w-65"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3D Turning Sheet 2 -->
+          <div class="flip-sheet sheet-2" aria-hidden="true">
+            <div class="flip-face front">
+              <div class="page-lines">
+                <span class="line-sm w-85"></span>
+                <span class="line-sm w-92"></span>
+                <span class="line-sm w-65"></span>
+              </div>
+            </div>
+            <div class="flip-face back">
+              <div class="page-lines">
+                <span class="line-sm w-80"></span>
+                <span class="line-sm w-70"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Page (Revealed Page with Pressed Flower) -->
           <div class="book-page page-right">
-            <div class="page-lines">
+            <!-- Normal Lines (Before turning) -->
+            <div class="page-lines default-lines">
               <span class="line-sm w-90"></span>
               <span class="line-sm w-80"></span>
               <span class="line-sm w-92"></span>
@@ -211,11 +291,44 @@
               <span class="line-sm w-65"></span>
               <span class="line-sm w-40"></span>
             </div>
-            <span class="page-num">49</span>
+
+            <!-- Pressed Dried Flower & Memory Fragment (Revealed on turn) -->
+            <div class="pressed-flower-revelation" aria-hidden="true">
+              <svg class="pressed-flower-svg" viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dried stem -->
+                <path d="M40 100 Q42 65 38 35 Q35 15 40 8" stroke="#806b53" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M39 60 Q48 48 54 44" stroke="#806b53" stroke-width="0.9" stroke-linecap="round"/>
+                <path d="M40 75 Q32 65 26 62" stroke="#806b53" stroke-width="0.9" stroke-linecap="round"/>
+                <!-- Pressed petals (Vintage parchment-rose tone) -->
+                <ellipse cx="40" cy="8" rx="4.5" ry="7" fill="#a48162" opacity="0.85"/>
+                <ellipse cx="34" cy="11" rx="4" ry="6" transform="rotate(-35 34 11)" fill="#8e6d51" opacity="0.8"/>
+                <ellipse cx="46" cy="11" rx="4" ry="6" transform="rotate(35 46 11)" fill="#b89373" opacity="0.85"/>
+                <ellipse cx="36" cy="17" rx="3.5" ry="5.5" transform="rotate(-60 36 17)" fill="#7d5f45" opacity="0.75"/>
+                <ellipse cx="44" cy="17" rx="3.5" ry="5.5" transform="rotate(60 44 17)" fill="#9c7a5c" opacity="0.8"/>
+                <circle cx="40" cy="12" r="2.5" fill="#5a412c"/>
+                <!-- Small dried leaf specks -->
+                <ellipse cx="54" cy="44" rx="2.5" ry="4.5" transform="rotate(25 54 44)" fill="#756149" opacity="0.7"/>
+                <ellipse cx="26" cy="62" rx="2.2" ry="4" transform="rotate(-30 26 62)" fill="#756149" opacity="0.7"/>
+              </svg>
+              <p class="penciled-memory-note">chiều mưa năm ấy...</p>
+            </div>
+
+            <!-- Page Number -->
+            <span class="page-num" id="page-num-right">49</span>
+
+            <!-- Subtle hover prompt -->
+            <div class="book-interact-prompt">
+              <span>lần giở trang sách</span>
+            </div>
+          </div>
+
+          <!-- Transient Cinematic Whisper Caption (Fades away after 2.5s) -->
+          <div class="book-whisper-caption" id="book-caption" aria-live="polite">
+            <span>nhành hoa ép giữa trang sách cũ</span>
           </div>
         </div>
 
-        <!-- 4. The Handwritten Letter (Subtle Interactive Focus) -->
+        <!-- 4. The Handwritten Letter (Subtle Interactive Focus - Preserved Full Modal) -->
         <div class="desk-item interactive-letter" id="interactive-letter" role="button" tabindex="0" aria-label="Đọc lá thư tay" title="Nhấp để mở lá thư">
           <div class="letter-shadow"></div>
           <div class="letter-sheet">
@@ -235,17 +348,19 @@
       </div>
 
       <!-- Desk Whisper Note -->
-      <div class="room-whisper">
-        <p>Một góc nhỏ trú mưa. Hãy thử mở lá thư trên bàn.</p>
+      <div class="room-whisper"><p>Ở đây, không ai cần điều gì từ bạn.</p></div>
+      <div class="room-actions">
+        <button id="stay-here" class="stay-here">Ở LẠI ĐÂY</button>
+        <button id="escape-again-bottom" class="escape-again-bottom">TRỐN ĐI LẦN NỮA</button>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Letter Reader Modal (The Unfolded Letter) -->
-  <div id="letter-modal" class="letter-modal" aria-hidden="true">
-    <div class="letter-backdrop" id="letter-backdrop"></div>
+  <!-- The Only Full Reading Modal: The Comforting Handwritten Letter (Preserved exactly as requested) -->
+  <div id="letter-modal" class="letter-modal memory-modal" aria-hidden="true">
+    <div class="letter-backdrop modal-backdrop" id="letter-backdrop"></div>
     <div class="letter-paper-wrapper">
-      <button id="close-letter-btn" class="close-letter" aria-label="Gấp lá thư lại">
+      <button id="close-letter-btn" class="close-letter close-memory-btn" aria-label="Gấp lá thư lại">
         <span>&times; gấp lại</span>
       </button>
 
@@ -277,7 +392,7 @@
           </p>
         </div>
 
-        <footer class="letter-footer">
+        <footer class="letter-footer memory-footer">
           <span>nhấp vào bất kỳ đâu bên ngoài để gấp thư lại</span>
         </footer>
       </article>

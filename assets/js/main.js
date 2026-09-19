@@ -1,190 +1,101 @@
-/**
- * ESCAPE — Main Coordinator & Subtle Interactive Physics
- */
-
+/** ESCAPE — scene coordinator */
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize Rain Canvas Simulation
-  let rainSim = null;
-  if (window.RainSimulation) {
-    rainSim = new window.RainSimulation('rain-canvas');
-  }
+  if (window.RainSimulation) new window.RainSimulation('rain-canvas');
+  const audioEngine = window.AmbientAudioEngine ? new window.AmbientAudioEngine() : null;
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => [...document.querySelectorAll(selector)];
+  const hero = $('.experience-wrapper');
+  const selection = $('#selection-scene');
+  const preview = $('#preview-scene');
+  const room = $('#room-scene');
+  const curtain = $('#transition-curtain');
+  const audioToggle = $('#audio-toggle');
+  const soundStatus = $('#sound-status');
+  const previewTitle = $('#preview-title');
 
-  // 2. Initialize Ambient Audio Engine
-  let audioEngine = null;
-  if (window.AmbientAudioEngine) {
-    audioEngine = new window.AmbientAudioEngine();
-  }
-
-  const audioToggle = document.getElementById('audio-toggle');
-  const soundStatus = document.getElementById('sound-status');
-
-  if (audioToggle && audioEngine) {
-    audioToggle.addEventListener('click', () => {
-      const isNowPlaying = audioEngine.toggle();
-      if (isNowPlaying) {
-        audioToggle.classList.add('is-playing');
-        soundStatus.textContent = 'bật';
-      } else {
-        audioToggle.classList.remove('is-playing');
-        soundStatus.textContent = 'tắt';
+  function setScene(scene) {
+    [hero, selection, preview, room].forEach((item) => {
+      if (!item) return;
+      const active = item === scene;
+      item.classList.toggle('active', active);
+      if (item !== hero) item.setAttribute('aria-hidden', String(!active));
+      if (item === hero) {
+        item.style.opacity = active ? '1' : '0';
+        item.style.pointerEvents = active ? 'auto' : 'none';
       }
     });
   }
-
-  // 3. Subtle Cinematic Parallax (Mouse & Gyroscope)
-  const lampGlow = document.querySelector('.warm-lamp-glow');
-  const heroContent = document.querySelector('.quote-container');
-  
-  let targetX = 0, targetY = 0;
-  let currentX = 0, currentY = 0;
-  let isParallaxActive = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-
-  if (isParallaxActive && window.innerWidth > 768) {
-    window.addEventListener('mousemove', (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      // Very slight normalized offset (-1 to 1)
-      targetX = (e.clientX - centerX) / centerX;
-      targetY = (e.clientY - centerY) / centerY;
-    }, { passive: true });
-
-    const updateParallax = () => {
-      // Smooth linear interpolation (lerp)
-      currentX += (targetX - currentX) * 0.04;
-      currentY += (targetY - currentY) * 0.04;
-
-      if (lampGlow) {
-        // Lamp moves gently in opposite direction to simulate interior depth
-        lampGlow.style.transform = `translate(${currentX * -25}px, ${currentY * -20}px)`;
-      }
-
-      if (heroContent) {
-        // Text floating with slight perspective
-        heroContent.style.transform = `translate(${currentX * 10}px, ${currentY * 8}px)`;
-      }
-
-      requestAnimationFrame(updateParallax);
-    };
-
-    requestAnimationFrame(updateParallax);
+  function fadeThrough(message, next) {
+    const text = curtain?.querySelector('.trans-message');
+    if (text) text.textContent = message;
+    curtain?.classList.add('active');
+    window.setTimeout(() => {
+      setScene(next);
+      window.setTimeout(() => curtain?.classList.remove('active'), 700);
+    }, 1100);
   }
-
-  // 4. "Enter" CTA Transition Flow into Room Scene
-  const enterBtn = document.getElementById('enter-btn');
-  const transitionCurtain = document.getElementById('transition-curtain');
-  const experienceWrapper = document.querySelector('.experience-wrapper');
-  const roomScene = document.getElementById('room-scene');
-  const backToWindowBtn = document.getElementById('back-to-window');
-
-  // Letter Modal Elements
-  const letterEl = document.getElementById('interactive-letter');
-  const letterModal = document.getElementById('letter-modal');
-  const closeLetterBtn = document.getElementById('close-letter-btn');
-  const letterBackdrop = document.getElementById('letter-backdrop');
-
-  if (enterBtn && transitionCurtain && roomScene) {
-    enterBtn.addEventListener('click', () => {
-      // 1. Activate sound if not yet playing, with gentle user consent
-      if (audioEngine && !audioEngine.isPlaying) {
-        audioEngine.start();
-        if (audioToggle) audioToggle.classList.add('is-playing');
-        if (soundStatus) soundStatus.textContent = 'bật';
-      }
-
-      // 2. Smooth curtain fade in (interlude)
-      transitionCurtain.classList.add('active');
-
-      // 3. After reading interlude, reveal Room Scene
-      setTimeout(() => {
-        if (experienceWrapper) {
-          experienceWrapper.style.opacity = '0';
-          experienceWrapper.style.pointerEvents = 'none';
-          experienceWrapper.style.transition = 'opacity 1s ease';
-        }
-        roomScene.classList.add('active');
-        roomScene.setAttribute('aria-hidden', 'false');
-
-        // Gently lift the curtain to reveal the room
-        setTimeout(() => {
-          transitionCurtain.classList.remove('active');
-        }, 900);
-      }, 2600);
-    });
+  function startAudio() {
+    if (!audioEngine || audioEngine.isPlaying) return;
+    audioEngine.start();
+    audioToggle?.classList.add('is-playing');
+    if (soundStatus) soundStatus.textContent = 'bật';
   }
-
-  // Return to Window / Hero view
-  if (backToWindowBtn && roomScene && experienceWrapper) {
-    backToWindowBtn.addEventListener('click', () => {
-      roomScene.classList.remove('active');
-      roomScene.setAttribute('aria-hidden', 'true');
-
-      setTimeout(() => {
-        experienceWrapper.style.opacity = '1';
-        experienceWrapper.style.pointerEvents = 'auto';
-      }, 400);
-    });
-  }
-
-  // 5. Interactive Letter Reader Interaction
-  const openLetter = () => {
-    if (letterModal) {
-      letterModal.classList.add('active');
-      letterModal.setAttribute('aria-hidden', 'false');
-    }
-  };
-
-  const closeLetter = () => {
-    if (letterModal) {
-      letterModal.classList.remove('active');
-      letterModal.setAttribute('aria-hidden', 'true');
-    }
-  };
-
-  if (letterEl) {
-    letterEl.addEventListener('click', openLetter);
-    letterEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openLetter();
-      }
-    });
-  }
-
-  if (closeLetterBtn) {
-    closeLetterBtn.addEventListener('click', closeLetter);
-  }
-
-  if (letterBackdrop) {
-    letterBackdrop.addEventListener('click', closeLetter);
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeLetter();
-    }
+  audioToggle?.addEventListener('click', () => {
+    if (!audioEngine) return;
+    const playing = audioEngine.toggle();
+    audioToggle.classList.toggle('is-playing', playing);
+    if (soundStatus) soundStatus.textContent = playing ? 'bật' : 'tắt';
   });
+  $('#enter-btn')?.addEventListener('click', () => { startAudio(); fadeThrough('Where would you go?', selection); });
+  $('#selection-back')?.addEventListener('click', () => setScene(hero));
+  $('#preview-back')?.addEventListener('click', () => setScene(selection));
 
-  // 6. Subtle Parallax for the Desk Still-Life
-  const deskSurface = document.querySelector('.desk-surface');
-  if (isParallaxActive && window.innerWidth > 768 && deskSurface) {
-    window.addEventListener('mousemove', (e) => {
-      if (!roomScene.classList.contains('active')) return;
-      const xOffset = (e.clientX - window.innerWidth / 2) * 0.015;
-      const yOffset = (e.clientY - window.innerHeight / 2) * 0.012;
-      deskSurface.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+  $$('.destination').forEach((destination) => {
+    destination.addEventListener('click', () => {
+      const name = destination.querySelector('span')?.textContent || '';
+      if (destination.dataset.destination === 'rainy') fadeThrough('Somewhere Rainy', room);
+      else {
+        if (previewTitle) previewTitle.textContent = name;
+        preview.className = `preview-scene active ${destination.dataset.destination}`;
+        selection.classList.remove('active');
+        selection.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+  function returnToSelection() { room?.classList.remove('is-staying'); fadeThrough('Where would you go?', selection); }
+  $('#escape-again')?.addEventListener('click', returnToSelection);
+  $('#escape-again-bottom')?.addEventListener('click', returnToSelection);
+  $('#stay-here')?.addEventListener('click', () => room?.classList.add('is-staying'));
+
+  const showCaption = (node) => { node?.classList.add('visible'); window.setTimeout(() => node?.classList.remove('visible'), 2600); };
+  const windowEl = $('#interactive-window');
+  const activateWindow = () => { windowEl?.classList.remove('is-wiped'); window.requestAnimationFrame(() => windowEl?.classList.add('is-wiped')); showCaption($('#window-caption')); };
+  windowEl?.addEventListener('click', activateWindow);
+  windowEl?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); activateWindow(); } });
+  const book = $('#interactive-book');
+  const activateBook = () => { book?.classList.remove('is-open'); window.requestAnimationFrame(() => book?.classList.add('is-open')); showCaption($('#book-caption')); };
+  book?.addEventListener('click', activateBook);
+  book?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); activateBook(); } });
+
+  const letter = $('#interactive-letter');
+  const letterModal = $('#letter-modal');
+  const closeModal = () => { letterModal?.classList.remove('active'); letterModal?.setAttribute('aria-hidden', 'true'); };
+  const openLetter = () => { letterModal?.classList.add('active'); letterModal?.setAttribute('aria-hidden', 'false'); };
+  letter?.addEventListener('click', openLetter);
+  letter?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openLetter(); } });
+  $('#close-letter-btn')?.addEventListener('click', closeModal);
+  $('#letter-backdrop')?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
+
+  const lampGlow = $('.warm-lamp-glow');
+  if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && window.innerWidth > 768) {
+    window.addEventListener('mousemove', (event) => {
+      const x = (event.clientX / window.innerWidth - .5) * 20;
+      const y = (event.clientY / window.innerHeight - .5) * 14;
+      if (lampGlow) lampGlow.style.transform = `translate(${x}px, ${y}px)`;
     }, { passive: true });
   }
-
-  // 5. Subtle Real-Time Night Clock in Footer
-  const timeEl = document.getElementById('current-time');
-  if (timeEl) {
-    const updateTime = () => {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      timeEl.textContent = `${hours}:${minutes}`;
-    };
-    updateTime();
-    setInterval(updateTime, 30000);
-  }
+  const time = $('#current-time');
+  const updateTime = () => { if (time) time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); };
+  updateTime(); window.setInterval(updateTime, 30000);
 });
