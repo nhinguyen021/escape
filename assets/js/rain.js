@@ -44,7 +44,18 @@ class RainSimulation {
     
     // Start animation loop
     this.animate = this.animate.bind(this);
-    requestAnimationFrame(this.animate);
+    this.frameId = requestAnimationFrame(this.animate);
+  }
+
+  setPaused(paused) {
+    if (paused) {
+      this.isRunning = false;
+      cancelAnimationFrame(this.frameId);
+    } else if (!this.isRunning) {
+      this.isRunning = true;
+      this.lastTime = performance.now();
+      this.frameId = requestAnimationFrame(this.animate);
+    }
   }
 
   resize() {
@@ -128,6 +139,8 @@ class RainSimulation {
   animate(currentTime) {
     if (!this.isRunning) return;
 
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motionFactor = isReducedMotion ? 0.25 : 1.0;
     const delta = Math.min((currentTime - this.lastTime) / 16.67, 2.5);
     this.lastTime = currentTime;
 
@@ -138,8 +151,8 @@ class RainSimulation {
     this.ctx.lineWidth = 1;
     for (let i = 0; i < this.streaks.length; i++) {
       const s = this.streaks[i];
-      s.y += s.speed * delta;
-      s.x -= (s.slant * 0.5) * delta;
+      s.y += s.speed * delta * motionFactor;
+      s.x -= (s.slant * 0.5) * delta * motionFactor;
 
       if (s.y > this.height + s.length) {
         s.y = -s.length;
@@ -207,7 +220,7 @@ class RainSimulation {
       this.ctx.fill();
     }
 
-    requestAnimationFrame(this.animate);
+    this.frameId = requestAnimationFrame(this.animate);
   }
 }
 

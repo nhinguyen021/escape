@@ -1,0 +1,69 @@
+/* A small tidepool of play. Everything is drawn locally, without image assets. */
+.sea-scene { position:fixed; inset:0; z-index:40; overflow-y:auto; overflow-x:hidden; color:#f4e9db; background:#101e2b; opacity:0; visibility:hidden; pointer-events:none; transition:opacity 1s ease; }
+.sea-scene.active { opacity:1; visibility:visible; pointer-events:auto; }
+.sea-scene[inert] { visibility:hidden!important; pointer-events:none!important; }
+.sea-world { position:relative; min-height:720px; height:100svh; overflow:hidden; isolation:isolate; background:linear-gradient(#152635 0%,#40535b 24%,#bb9180 39%,#e8b799 43%,#486976 44%,#2f6471 60%,#aa9d8d 66%,#c6ae93 100%); }
+.sea-sun { position:absolute; width:72px; height:72px; left:68%; top:33%; border-radius:50%; background:#f6d1a4; box-shadow:0 0 70px 25px #f2c69a30; opacity:.85; }
+.sea-reflection { position:absolute; top:44%; left:62%; width:23%; height:20%; background:repeating-linear-gradient(0deg,transparent 0 10px,#eac8a43b 12px 14px,transparent 16px 23px); clip-path:polygon(35% 0,60% 0,100% 100%,0 100%); filter:blur(2px); animation:sea-glimmer 8s ease-in-out infinite alternate; }
+.sea-cloud { position:absolute; width:38%; height:2px; top:29%; left:10%; background:#f2d1bc3b; box-shadow:50px 12px 20px #f2d1bc3b; filter:blur(2px); }
+.sea-wave { position:absolute; left:-10%; width:120%; height:12%; top:56%; border-radius:50%; border-top:2px solid #e9eee17a; background:linear-gradient(#9cc4c838,transparent); animation:sea-tide 10s ease-in-out infinite; pointer-events:none; }
+.sea-wave.second { top:51%; opacity:.4; animation-delay:-5s; }
+.sea-grain { position:absolute; inset:0; opacity:.14; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E"); mix-blend-mode:soft-light; }
+.sea-intro { position:absolute; z-index:1; top:15%; left:6%; right:6%; text-align:center; pointer-events:none; }
+.sea-eyebrow { text-transform:uppercase; font:300 .65rem var(--font-sans); letter-spacing:.3em; color:#e8c9b5; }
+.sea-intro h2 { margin:.6rem 0 .8rem; font:300 clamp(2.8rem,5.5vw,5.5rem)/1.1 var(--font-serif); letter-spacing:-.02em; }
+.sea-intro p:last-child { font:italic clamp(.95rem,1.8vw,1.15rem) var(--font-serif); color:#e5dfd3; }
+.sea-play { position:absolute; z-index:2; left:7%; right:7%; top:61%; height:22%; border:1px dashed #544f4245; border-radius:48% 48% 18px 18px / 12% 12% 18px 18px; background:#ecd0a80b; touch-action:pan-y; }
+.sea-play:focus-visible { outline:2px solid #fff3d8; outline-offset:5px; }
+.sea-play-label { position:absolute; left:0; right:0; top:44%; text-align:center; pointer-events:none; font:italic 1rem var(--font-serif); color:#4d504ade; transition:opacity .6s; }
+.sea-play.has-shells .sea-play-label { opacity:0; }
+.sea-shell { position:absolute; z-index:3; width:clamp(48px,5vw,66px); height:clamp(48px,5vw,66px); padding:5px; border:0; background:transparent; transform:translate(-50%,-50%) rotate(var(--tilt,0deg)); cursor:grab; touch-action:none; filter:drop-shadow(2px 5px 3px #39342930); transition:filter .2s; }
+.sea-shell svg { width:100%; height:100%; overflow:visible; pointer-events:none; }
+.sea-shell:hover { filter:drop-shadow(0 0 8px #fff2c999); }
+.sea-shell:focus-visible,.sea-shell[aria-pressed="true"] { outline:1px solid #fff3d8; outline-offset:3px; border-radius:50%; }
+.sea-shell.is-dragging { cursor:grabbing; z-index:8; filter:drop-shadow(0 8px 6px #3d372847); }
+.sea-tray { position:absolute; z-index:3; top:48%; left:12%; right:12%; height:10%; }
+.sea-tray-label { position:absolute; top:-14px; left:0; right:0; text-align:center; font:300 .6rem var(--font-sans); letter-spacing:.16em; color:#f6e3c8bd; }
+.sea-shell:not(.is-placed) { animation:shell-bob 5s ease-in-out infinite; animation-delay:var(--delay,0s); }
+.sea-shell.is-dragging { animation:none; }
+.sea-message { position:absolute; z-index:4; left:20%; right:20%; bottom:1%; text-align:center; color:#343c3a; font:italic clamp(1rem,2vw,1.3rem)/1.4 var(--font-serif); pointer-events:none; }
+.sea-message small { display:block; margin-top:5px; font:300 .6rem var(--font-sans); letter-spacing:.12em; color:#4d514b; }
+.sea-crab { position:absolute; z-index:4; left:5%; bottom:8%; width:66px; color:#924c39; transition:left 2.5s ease-in-out; pointer-events:none; }
+.sea-crab svg { width:100%; overflow:visible; }
+.sea-crab.is-happy .crab-claw { transform-origin:50% 60%; animation:crab-wave .6s ease-in-out 4 alternate; }
+.sea-tools { position:absolute; z-index:6; left:0; right:0; top:85%; display:flex; justify-content:center; gap:12px; }
+.sea-tools button { min-height:40px; border:1px solid #434d4545; padding:8px 15px; border-radius:100px; background:#efddc62b; color:#35413d; font:400 .65rem var(--font-sans); letter-spacing:.07em; cursor:pointer; }
+.sea-tools button:hover { background:#fae9cc7a; }
+.sea-tools button:focus-visible { outline:2px solid #374c47; outline-offset:3px; }
+.sea-tools button:disabled { opacity:.45; cursor:default; }
+.sea-instruction { position:absolute; top:57%; left:5%; right:5%; text-align:center; font:300 .65rem/1.5 var(--font-sans); color:#f6ecdd; letter-spacing:.025em; }
+.sea-scene:not(.active) *, .sea-scene.is-paused * { animation-play-state:paused!important; }
+@keyframes sea-tide { 0%,100% { transform:translateY(-5px) scaleX(1); opacity:.35; } 50% { transform:translateY(18px) scaleX(1.08); opacity:.8; } }
+@keyframes sea-glimmer { to { opacity:.45; transform:scaleX(.9); } }
+@keyframes shell-bob { 50% { margin-top:-5px; } }
+@keyframes crab-wave { to { transform:rotate(-14deg) translateY(-3px); } }
+@media(max-width:600px) { .sea-world { min-height:760px; } .sea-intro { top:16%; } .sea-intro h2 { font-size:2.75rem; } .sea-play { left:5%;right:5%; } .sea-tray { left:8%;right:8%; } .sea-shell { width:48px;height:48px; } .sea-message { left:8%;right:8%;bottom:1%;font-size:1.05rem; } .sea-crab { width:48px;bottom:11%; } .sea-tools { gap:8px; } .sea-tools button { padding:8px 12px; } .sea-instruction { font-size:.62rem; } }
+@media(prefers-reduced-motion:reduce) { .sea-scene *, .sea-scene { animation:none!important;transition:none!important; } }
+
+/* Room for both a drawing surface and separate decoration controls. */
+.sea-world { min-height:980px; background:linear-gradient(#152635 0%,#40535b 22%,#bb9180 33%,#e8b799 37%,#486976 38%,#2f6471 49%,#aa9d8d 54%,#c6ae93 100%); }
+.sea-intro { top:12%; } .sea-sun { top:27%; }
+.sea-reflection { top:38%;height:13%; } .sea-wave { top:48%; } .sea-wave.second { top:44%; }
+.sea-tray { top:39%;height:8%; } .sea-instruction { top:47%; }
+.sea-play { top:58%;height:28%;border-radius:18px; }
+.sea-tools { top:88%; } .sea-crab { bottom:9%; }
+.sea-draw-tools { position:absolute;z-index:5;top:51%;left:5%;right:5%;display:flex;flex-wrap:wrap;justify-content:center;gap:8px; }
+.sea-draw-tools button { min-height:40px;padding:8px 13px;border:1px solid #39483d55;border-radius:20px;background:#ead4b6a6;color:#35413d;font:400 .7rem var(--font-sans);cursor:pointer; }
+.sea-draw-tools button[aria-pressed="true"] { background:#3e554b;color:#fff3da;border-color:#3e554b; }
+.sea-draw-tools button:disabled { opacity:.45;cursor:default; }
+.sea-draw-tools button:focus-visible { outline:2px solid #fff0d4;outline-offset:3px; }
+#sea-ink { position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;border-radius:18px; }
+#sea-ink path { fill:none;stroke:#806950;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 1px 0 #eddbb9); }
+.sea-play.is-drawing { touch-action:none;cursor:crosshair;user-select:none; }
+.sea-play.is-drawing .sea-shell { pointer-events:none; }
+.sea-play.has-drawing .sea-play-label { opacity:0; }
+@media(max-width:600px) {
+ .sea-world { min-height:1080px; } .sea-intro { top:12%; }
+ .sea-draw-tools { gap:6px;top:51%; } .sea-draw-tools button { padding:8px 10px;font-size:.65rem;min-height:40px; }
+ .sea-play { top:61%;height:25%; } .sea-instruction { left:8%;right:8%; }
+}

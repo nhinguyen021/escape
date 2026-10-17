@@ -1,0 +1,115 @@
+/* Place 05 only: preserve the shared preview shell and all completed places. */
+#impossible-world { display:none; }
+#preview-scene.impossible { display:block; padding:0; overflow-y:auto; background:#142432; }
+#preview-scene.impossible > .preview-copy { display:none; }
+#preview-scene.impossible #impossible-world { display:flex; }
+#impossible-world { position:relative; isolation:isolate; min-height:max(100svh,1000px); flex-direction:column; align-items:center; padding:110px clamp(20px,5vw,80px) 28px; color:#f1e9ef; text-align:center; }
+#impossible-world .imp-landscape { position:absolute; inset:0; z-index:-3; background:url('../art/impossible-garden.svg') center top/cover no-repeat; }
+#impossible-world::before { content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(180deg,#101c36b3,transparent 28%,transparent 55%,#0f2330e6 92%); }
+#impossible-world .imp-intro { max-width:750px; text-shadow:0 2px 16px #111a30; }
+#impossible-world .imp-eyebrow { font-size:10px; letter-spacing:.25em; color:#e1c9d6; margin-bottom:15px; }
+#impossible-world h1 { font-family:var(--font-serif); font-size:clamp(46px,6vw,82px); line-height:1.08; font-weight:300; letter-spacing:.01em; }
+#impossible-world .imp-intro>p:last-child { font-size:clamp(12px,1.2vw,15px); line-height:1.8; margin:16px auto 0; color:#e5dfec; max-width:450px; }
+#impossible-world .imp-arch-caption { margin:210px 0 32px; max-width:400px; font-family:var(--font-serif); font-style:italic; font-size:20px; line-height:1.5; color:#efe2e6; text-shadow:0 2px 7px #0a1324; }
+#impossible-world .imp-arch-caption>span { display:block; font-size:28px; color:#d7bfa9; }
+#impossible-world .imp-portals { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(15px,3vw,48px); width:100%; max-width:1120px; align-items:start; }
+#impossible-world .imp-portal { border:0; background:none; padding:0 0 12px; color:inherit; font:inherit; cursor:default; display:flex; flex-direction:column; align-items:center; min-width:0; text-align:center; }
+#impossible-world .imp-portal-art { display:block; position:relative; width:100%; max-width:190px; transition:transform .6s var(--ease-poetic); }
+#impossible-world .imp-portal img { display:block; width:100%; height:auto; filter:drop-shadow(0 0 12px #b1c7e322); }
+#impossible-world .imp-portal-art::after { content:''; position:absolute; inset:14% 12% 5%; border-radius:100px 100px 0 0; background:linear-gradient(110deg,transparent 35%,#e5d6f028 50%,transparent 65%); background-size:300% 100%; animation:imp-portal-light 12s ease-in-out infinite; pointer-events:none; }
+#impossible-world .imp-portal-sigil { position:absolute; bottom:5%; left:calc(50% - 17px); width:34px; height:34px; border:1px solid #c7b7d2; border-radius:50%; background:#253647; color:#ead2cb; line-height:32px; font-size:20px; }
+#impossible-world .imp-portal-name { margin-top:14px; font-family:var(--font-serif); font-size:clamp(23px,2vw,30px); line-height:1.2; }
+#impossible-world .imp-portal-en { color:#d1bdcf; font-size:10px; letter-spacing:.06em; margin-top:7px; }
+#impossible-world .imp-portal-description { font-size:11px; line-height:1.8; max-width:210px; margin:12px 0; color:#dce1e7; }
+#impossible-world .imp-portal-hint { font-size:10px; color:#e1c4b4; border-bottom:1px solid #c6a78c66; padding-bottom:5px; }
+#impossible-world .imp-portal:hover .imp-portal-art,#impossible-world .imp-portal:focus-visible .imp-portal-art { transform:translateY(-6px); }
+#impossible-world .imp-portal:focus-visible { outline:2px solid #f3dfbd; outline-offset:7px; border-radius:4px; }
+#impossible-world .imp-mist { position:absolute; left:-5%; right:0; top:43%; height:170px; z-index:-2; pointer-events:none; background:radial-gradient(ellipse,#bcc9d922,transparent 65%); animation:imp-mist 22s ease-in-out infinite alternate; }
+#impossible-world .imp-fireflies { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:-1; }
+#impossible-world .imp-fireflies i { position:absolute; left:var(--x); top:var(--y); width:3px; height:3px; border-radius:50%; background:#efe1ac; box-shadow:0 0 8px 2px #dedcb044; animation:imp-firefly 9s ease-in-out infinite alternate; animation-delay:var(--delay); }
+#impossible-world .imp-footer { margin-top:34px; font-size:11px; line-height:1.9; color:#c5ced6; }
+#impossible-world .imp-footer>span { font-family:var(--font-serif); font-size:17px; font-style:italic; color:#d8c7d5; }
+#impossible-world .imp-footer p { margin-top:8px; }
+#preview-scene:not(.active) #impossible-world *,#preview-scene:not(.active) #impossible-world *::after { animation-play-state:paused; }
+@keyframes imp-portal-light { 0%,100% { background-position:100% 0;opacity:.2; } 50% { background-position:0 0;opacity:.7; } }
+@keyframes imp-firefly { from { transform:translate(0,0);opacity:.2; } to { transform:translate(13px,-20px);opacity:.8; } }
+@keyframes imp-mist { from { transform:translateX(-2%);opacity:.3; } to { transform:translateX(4%);opacity:.65; } }
+@media(max-width:700px) {
+ #impossible-world { min-height:100svh; padding-top:115px; }
+ #impossible-world .imp-landscape { background-size:auto 850px; background-position:center top; background-color:#172c39; }
+ #impossible-world .imp-arch-caption { margin-top:280px; font-size:18px; }
+ #impossible-world .imp-portals { grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 20px; }
+ #impossible-world .imp-portal-art { max-width:160px; }
+ #impossible-world .imp-portal-name { font-size:24px; }
+ #impossible-world .imp-portal-description { font-size:12px; }
+ #impossible-world::before { background:linear-gradient(180deg,#101c36b3,transparent 20%,#102534bb 50%,#102534 80%); }
+}
+@media(prefers-reduced-motion:reduce) {
+ #preview-scene.impossible { transition:none; }
+ #impossible-world *,#impossible-world *::after { animation:none!important;transition:none!important; }
+ #impossible-world .imp-portal:hover .imp-portal-art,#impossible-world .imp-portal:focus-visible .imp-portal-art { transform:none; }
+}
+/* Portal exploration stays inside the existing Impossible scene. */
+#impossible-world #imp-garden { display:contents; }
+#impossible-world [hidden] { display:none!important; }
+#impossible-world .imp-portal { cursor:pointer; }
+#impossible-world .imp-portal:disabled { cursor:wait; }
+#impossible-world[data-realm] { min-height:100svh; padding:0; }
+#impossible-world[data-realm]::before { display:none; }
+#impossible-world #imp-realm { position:relative; isolation:isolate; width:100%; min-height:100svh; padding:120px clamp(24px,6vw,90px) 34px; overflow:hidden; display:flex; flex-direction:column; align-items:center; }
+#impossible-world .imp-realm-background { position:absolute; inset:0; z-index:-2; background-size:cover; background-position:center; }
+#impossible-world[data-realm="moonflower"] .imp-realm-background { background-image:url('../art/world-moonflower.svg'); }
+#impossible-world[data-realm="isles"] .imp-realm-background { background-image:url('../art/world-isles.svg'); }
+#impossible-world[data-realm="crystal"] .imp-realm-background { background-image:url('../art/world-crystal.svg'); }
+#impossible-world[data-realm="stars"] .imp-realm-background { background-image:url('../art/world-stars.svg'); }
+#impossible-world #imp-realm::before { content:''; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,#101a32c9,transparent 45%,#0d2035dd); pointer-events:none; }
+#impossible-world .imp-return { align-self:flex-start; font:inherit; font-size:12px; color:#f0e4e5; border:1px solid #b6aec080; background:#152b3cde; min-height:44px; padding:10px 18px; cursor:pointer; }
+#impossible-world .imp-realm-header { margin-top:25px; text-shadow:0 2px 6px #14233c; }
+#impossible-world #imp-realm-en { font-size:11px; letter-spacing:.15em; color:#e2cfde; }
+#impossible-world #imp-realm-title { font-family:var(--font-serif); font-weight:300; font-size:clamp(38px,5vw,66px); margin:10px 0; }
+#impossible-world #imp-realm-intro { max-width:550px; font-size:14px; line-height:1.7; }
+#impossible-world .imp-object-space { flex:1; min-height:310px; display:grid; place-items:center; width:100%; }
+#impossible-world #imp-object { position:relative; display:flex; flex-direction:column; align-items:center; color:#f7e8d4; background:none; border:0; padding:12px; cursor:pointer; max-width:100%; font:inherit; }
+#impossible-world #imp-object-art { display:block; width:180px; height:180px; filter:drop-shadow(0 0 20px #d7cced55); }
+#impossible-world #imp-object-art svg { width:100%; height:100%; }
+#impossible-world #imp-object-label { background:#142b40eb; border:1px solid #bdafc599; padding:12px 18px; line-height:1.5; font-size:13px; }
+#impossible-world #imp-object::after { content:''; position:absolute; width:150px; height:150px; top:25px; border:2px solid #e1d3ee; border-radius:50%; opacity:0; pointer-events:none; }
+#impossible-world .imp-touched::after { animation:imp-ripple .9s ease-out; }
+#impossible-world [data-realm] { transition:none; }
+#impossible-world[data-realm="moonflower"] .imp-touched #imp-object-art { animation:imp-bloom .8s ease-out; }
+#impossible-world[data-realm="isles"] .imp-touched #imp-object-art { animation:imp-sail 1.2s ease-in-out; }
+#impossible-world[data-realm="crystal"] .imp-touched #imp-object-art { animation:imp-crystal .8s ease-out; }
+#impossible-world[data-realm="stars"] .imp-touched #imp-object-art { animation:imp-star 1s ease-out; }
+#impossible-world .imp-narrative { width:min(100%,650px); padding:18px 24px; background:#102538e8; border-top:1px solid #c2afbf77; }
+#impossible-world #imp-object-help { font-size:11px; color:#c7cfdd; line-height:1.7; }
+#impossible-world #imp-discovery { margin-top:10px; font-family:var(--font-serif); font-size:23px; line-height:1.5; min-height:70px; color:#f2e6db; }
+#impossible-world button:focus-visible,#impossible-world h2:focus-visible { outline:2px solid #ffe6bd; outline-offset:5px; }
+#impossible-world .imp-local-fade { position:fixed; inset:0; background:#192d45; opacity:0; pointer-events:none; z-index:2; transition:opacity .2s; }
+#impossible-world.imp-transitioning .imp-local-fade { opacity:.95; pointer-events:auto; }
+#impossible-world.imp-paused *,#impossible-world.imp-paused *::after { animation-play-state:paused; }
+@keyframes imp-ripple { from { opacity:.8;transform:scale(.5); } to { opacity:0;transform:scale(2); } }
+@keyframes imp-bloom { 0% { transform:scale(.7) rotate(-15deg); } 65% { transform:scale(1.15); } 100% { transform:none; } }
+@keyframes imp-sail { 50% { transform:translate(45px,-40px) rotate(12deg); } }
+@keyframes imp-crystal { 50% { transform:scale(1.12);filter:brightness(1.5); } }
+@keyframes imp-star { 50% { transform:translateY(35px) scale(.7); } }
+@media(max-width:600px) { #impossible-world #imp-realm { padding:110px 20px 28px; } #impossible-world .imp-object-space { min-height:270px; } #impossible-world #imp-discovery { font-size:21px; } }
+@media(prefers-reduced-motion:reduce) {
+ #impossible-world .imp-local-fade { transition:none; }
+ #impossible-world .imp-touched #imp-object-label { background:#34506a; border-color:#ffe6bd; }
+}
+/* Discovery states remain legible without motion or colour alone. */
+#impossible-world .imp-discovery-badge { display:block; font-size:10px; color:#c9d8e6; margin:0 0 12px; line-height:1.6; }
+#impossible-world .imp-found .imp-discovery-badge { color:#f5d9ab; }
+#impossible-world .imp-found .imp-portal-sigil { background:#5b5367; border-color:#f5d9ab; }
+#impossible-world #imp-reset-progress { margin-top:16px; min-height:44px; padding:8px 12px; font:inherit; color:#ddd0df; border:0; border-bottom:1px solid #a593b1; background:#192b3b; cursor:pointer; }
+#impossible-world #imp-completion { max-width:620px; margin:26px 20px 0; padding:16px 22px; color:#f9e1bd; background:#22374bde; font-family:var(--font-serif); font-size:23px; line-height:1.5; }
+#impossible-world .imp-garden-aura { position:absolute; inset:12% 5% 36%; pointer-events:none; z-index:-2; opacity:0; background:radial-gradient(ellipse at 50% 55%,#e7b5c04d,transparent 60%),radial-gradient(ellipse at 50% 35%,#c4e2c64d,transparent 60%); transition:opacity 1.4s; }
+#impossible-world.imp-awakened .imp-garden-aura { opacity:1; animation:imp-awakening 8s ease-in-out infinite alternate; }
+#impossible-world.imp-awakened .imp-fireflies i { width:5px; height:5px; background:#ffe2b7; }
+#impossible-world[data-realm="moonflower"] .imp-discovered #imp-object-art { filter:drop-shadow(0 0 25px #e5bdf199); }
+#impossible-world[data-realm="isles"] .imp-discovered #imp-object-art::after { content:'✧'; position:absolute; top:0; right:10px; color:#fff5c8; font-size:46px; text-shadow:0 0 16px #fff1c9; }
+#impossible-world[data-realm="crystal"] .imp-discovered #imp-object-art { filter:drop-shadow(0 0 24px #a2e8cfaa); }
+#impossible-world[data-realm="stars"] .imp-discovered #imp-object-label { border-color:#e8d7a5; box-shadow:0 8px 20px #c6d2ed33; }
+#impossible-world #imp-object-art { position:relative; }
+@keyframes imp-awakening { from { opacity:.65; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { #impossible-world .imp-garden-aura { animation:none!important;transition:none; } }

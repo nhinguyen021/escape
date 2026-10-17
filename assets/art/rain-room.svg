@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760" role="img" aria-labelledby="rr-title rr-desc">
+ <title id="rr-title">Căn phòng nhỏ cho ngày mưa</title>
+ <desc id="rr-desc">Ô cửa mưa xanh xám, rèm xanh lá, đèn vàng ấm, cuốn sách mở và tách trà trên bàn gỗ.</desc>
+ <defs>
+  <linearGradient id="rr-sky" x2="0" y2="1"><stop stop-color="#526875"/><stop offset="1" stop-color="#9caba9"/></linearGradient>
+  <linearGradient id="rr-wall" x2="1" y2="0"><stop stop-color="#d9d3c3"/><stop offset="1" stop-color="#ece1cb"/></linearGradient>
+  <clipPath id="rr-glass"><rect x="195" y="92" width="534" height="438"/></clipPath>
+  <pattern id="rr-paper" width="7" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".5" fill="#726d5d" opacity=".1"/></pattern>
+ </defs>
+ <rect width="900" height="760" fill="url(#rr-wall)"/>
+ <path d="M0 604H900V760H0" fill="#c6bdab"/>
+ <path d="M0 604H900" stroke="#afa48c" stroke-width="2"/>
+ <rect width="900" height="760" fill="url(#rr-paper)"/>
+ <path d="M698 448 876 445 900 641 601 641Z" fill="#f0d6a1" opacity=".45"/>
+ <!-- Deep wooden window reveal, cream-painted frame, and cool outside air. -->
+ <rect x="174" y="73" width="576" height="479" fill="#9a927e"/>
+ <rect x="187" y="83" width="550" height="456" fill="#e9e2d2"/>
+ <rect x="195" y="92" width="534" height="438" fill="url(#rr-sky)"/>
+ <g clip-path="url(#rr-glass)">
+  <g fill="#607777" opacity=".45">
+   <path d="M181 476 253 405 312 445 380 373 470 447 569 394 675 441 753 388V540H181Z"/>
+   <path d="M186 502 273 461 379 486 510 442 636 488 735 453V540H186Z" fill="#778c84"/>
+  </g>
+  <g fill="#546969" opacity=".55"><path d="M275 549V390l-38 70h24l-37 54h38v35M622 548V366l-35 69h23l-41 62h42v51M662 548V411l-23 46h15l-28 44h28v47"/></g>
+  <path d="M486 525V467h50v58" fill="#7e8580"/><path d="m479 467 32-25 32 25" fill="#5e6b6c"/>
+  <rect x="501" y="481" width="11" height="17" fill="#dbc292" opacity=".8"/>
+  <g stroke="#e5ece7" stroke-width="1.3" opacity=".48" class="rr-rain">
+   <path d="m220 96-7 49m46 2-6 44m44-113-7 55m46 34-8 57m49-125-7 50m50 19-7 45m44-124-6 43m49 20-7 52m49-3-6 41m42-103-6 45m49 24-6 50m44-124-7 52m43 19-7 48"/>
+   <path d="m215 252-6 39m52 26-7 53m43-114-6 43m52 34-8 53m44-124-7 52m48 30-6 45m52-114-7 43m43 31-6 49m46-120-6 44m46 32-7 46m44-107-7 43m40 21-5 49"/>
+   <path d="m221 425-7 48m49 22-6 42m45-114-7 42m51 24-6 44m44-111-5 48m43 20-7 46m51-113-6 47m48 22-7 39m45-111-6 46m45 26-7 45m45-113-6 45m40 20-7 44"/>
+  </g>
+  <g fill="#dae5e1" opacity=".6"><ellipse cx="332" cy="192" rx="2.8" ry="5"/><ellipse cx="590" cy="265" rx="3" ry="6"/><ellipse cx="426" cy="387" rx="2.5" ry="4.5"/><ellipse cx="659" cy="155" rx="2" ry="4"/><ellipse cx="266" cy="360" rx="2" ry="4"/><ellipse cx="545" cy="450" rx="2.5" ry="4"/></g>
+ </g>
+ <path d="M455 86h14v452h-14Z" fill="#e3dccb"/>
+ <path d="M464 92h5v438h-5Z" fill="#b0aa99"/>
+ <path d="M188 305h548v12H188Z" fill="#e7dfcf"/>
+ <path d="M188 315h548v3H188Z" fill="#aaa797"/>
+ <rect x="163" y="538" width="601" height="16" rx="1" fill="#f1e8d4"/>
+ <path d="M171 554h585l-8 8H179Z" fill="#b2a28b"/>
+ <!-- Quiet linen curtains, drawn with broad fabric folds rather than glow. -->
+ <path d="M128 65H798" stroke="#766b56" stroke-width="6" stroke-linecap="round"/>
+ <g class="rr-curtain rr-curtain-left">
+  <path d="M145 70H258C254 208 213 326 212 463L211 569Q179 558 145 574Z" fill="#7d8b73"/>
+  <path d="M160 73C174 231 164 400 160 563M193 73C201 230 182 423 185 563M228 73C219 236 202 392 204 555" stroke="#64735f" stroke-width="11" fill="none" opacity=".5"/>
+  <path d="M151 74C163 235 149 411 151 562M207 74C207 222 189 383 194 558M247 73C231 210 213 292 211 381" stroke="#a5b098" stroke-width="5" fill="none" opacity=".55"/>
+ </g>
+ <g class="rr-curtain rr-curtain-right">
+  <path d="M670 70H786V573Q748 558 715 568C718 397 676 265 670 70Z" fill="#87947b"/>
+  <path d="M688 74C698 248 734 410 728 558M722 74C716 229 752 405 752 562M764 74C749 245 773 401 774 562" stroke="#66765f" stroke-width="11" fill="none" opacity=".45"/>
+  <path d="M700 74C705 223 737 435 737 559M746 74C734 266 766 434 761 562M780 74C766 230 784 420 782 560" stroke="#b0b89e" stroke-width="5" fill="none" opacity=".5"/>
+ </g>
+ <!-- Wood desktop and a pool of warm lamplight. -->
+ <path d="M57 622 852 606 897 664 25 684Z" fill="#b18c64"/>
+ <path d="M25 684 897 664v17L25 703Z" fill="#88684c"/>
+ <path d="m59 646 778-18M117 670l699-20" stroke="#d0ad80" stroke-width="2" opacity=".55"/>
+ <path d="m72 700-4 60h19l12-60M834 684l15 76h20l-7-76" fill="#7d6049"/>
+ <ellipse cx="746" cy="642" rx="119" ry="20" fill="#dec08b" opacity=".45"/>
+ <!-- A linen-shaded reading lamp. -->
+ <ellipse cx="777" cy="629" rx="42" ry="9" fill="#76624b"/><ellipse cx="777" cy="625" rx="37" ry="8" fill="#9f865f"/>
+ <path d="M777 620V442" stroke="#91764d" stroke-width="8"/>
+ <path d="M780 618V442" stroke="#c7ac77" stroke-width="2"/>
+ <path d="M735 352h84l36 100H701Z" fill="#d8b984"/>
+ <path d="M748 354h57l20 95H727Z" fill="#edd3a0"/>
+ <path d="M735 352h84M701 452h154" stroke="#b4976e" stroke-width="3"/>
+ <ellipse cx="778" cy="452" rx="76" ry="7" fill="#f2d7a3"/>
+ <!-- Book, folded linen, and tea. -->
+ <path d="m247 632 173-8 57 45-183 10Z" fill="#d7cbb5"/>
+ <g class="rr-book-art"><path d="m280 615 77-8 61 14 64 37-85-6-70 13Z" fill="#827a62"/>
+  <path d="m285 610 72-7 61 14 57 35-79-6-67 12Z" fill="#eee4cf"/><path d="m357 604 39 42" stroke="#b9ac93" stroke-width="2"/>
+  <g stroke="#b9ac93" stroke-width="1.2"><path d="m302 618 48-4m-41 10 49-4m-40 10 47-4m-39 11 47-4m13-14 35 10m-28-3 36 10m-28-3 35 10"/></g>
+  <path d="m358 606 15 28 6-2-18-26" fill="#919c7c"/>
+ </g>
+ <ellipse cx="575" cy="642" rx="48" ry="11" fill="#97836b" opacity=".28"/><ellipse cx="575" cy="635" rx="42" ry="10" fill="#e8ddc4"/>
+ <path d="M601 594c38-10 31 37-1 29" fill="none" stroke="#eee4cd" stroke-width="8"/>
+ <path d="M546 589h58l-5 35q-24 19-48 0Z" fill="#ede1c8"/>
+ <ellipse cx="575" cy="590" rx="29" ry="7" fill="#f5ead2"/><ellipse cx="575" cy="590" rx="24" ry="4" fill="#a37e4e"/>
+ <g class="rr-steam" stroke="#f5eee0" stroke-width="2" fill="none" opacity=".7"><path d="M565 575c-14-15 11-18 0-33M580 574c14-17-10-19 2-36"/></g>
+ <path d="m104 641 71-4 20 18-73 5Z" fill="#e9dfc9"/><path d="m107 642 45 8 23-12" stroke="#c7b99c" fill="none"/>
+</svg>

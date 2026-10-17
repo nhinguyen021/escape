@@ -1,0 +1,115 @@
+/* Rain-only design. Shared scene/audio/navigation code remains unchanged. */
+#room-scene.rain-room {
+ --rr-ink:#454c43; --rr-muted:#737a6e; --rr-paper:#ece8de;
+ background:var(--rr-paper);color:var(--rr-ink);padding:0;
+ display:flex;justify-content:flex-start;overflow-y:auto;overflow-x:hidden;
+ min-height:0;isolation:isolate;
+}
+.rain-room .room-nav { width:auto;position:relative;flex:none;margin:clamp(1.2rem,3.5vw,2.2rem) clamp(1.2rem,4.5vw,3.5rem) 0;padding:0;min-height:40px; }
+.rain-room .room-nav-btn { color:var(--rr-ink);border:0;border-radius:0;padding:8px 0;min-height:40px;backdrop-filter:none;background:none; }
+.rain-room .room-nav-btn:hover { color:#7f6543;background:none; }
+.rain-room .rr-layout { width:min(1340px,100%);margin:auto;display:grid;grid-template-columns:minmax(240px,.78fr) minmax(0,1.8fr);align-items:center;gap:clamp(24px,4vw,64px);padding:50px clamp(24px,5vw,76px) 40px; }
+.rain-room .rr-copy { padding-bottom:50px; }
+.rain-room .rr-kicker { font:400 .62rem/1.8 var(--font-sans);text-transform:uppercase;letter-spacing:.22em;color:#79816f;max-width:230px; }
+.rain-room h2 { font:300 clamp(3.8rem,6vw,6.4rem)/.98 var(--font-serif);letter-spacing:-.035em;margin:25px 0 24px;color:#424b42; }
+.rain-room .rr-subtitle { font:400 clamp(1.2rem,1.7vw,1.5rem)/1.55 var(--font-serif);color:#666e61;max-width:250px; }
+.rain-room .rr-divider { width:32px;height:1px;background:#b8b5a4;margin:36px 0 22px; }
+.rain-room .rr-invitation { font:italic 400 1.2rem var(--font-serif);color:#8c714d; }
+.rain-room .rr-caption { font:300 .68rem/1.9 var(--font-sans);color:#747a6f;margin-top:8px;max-width:245px; }
+.rain-room .rr-room { width:100%;position:relative;margin:0; }
+.rain-room .rr-art { display:block;width:100%;height:auto;overflow:hidden; }
+.rain-room .rr-window-button { position:absolute;left:27%;top:12.1%;width:48%;height:57.6%;padding:0;border:0;background:transparent;cursor:pointer;z-index:2;touch-action:manipulation; }
+.rain-room .rr-window-button:focus-visible { outline:2px solid #f5e9cb;outline-offset:-8px; }
+.rain-room .rr-window-button::after { content:'';position:absolute;left:50%;top:46%;width:36px;height:36px;border:1px solid #e8eee2;border-radius:50%;opacity:0;transform:translate(-50%,-50%);pointer-events:none; }
+.rain-room .rr-window-button.is-wiped::after { animation:rr-ripple 1.8s ease-out; }
+.rain-room .rr-window-button:hover { background:#f3e6c804; }
+.rain-room .rr-window-note { position:absolute;left:25%;right:25%;bottom:32%;text-align:center;color:#eff0e5;font:italic 1rem var(--font-serif);opacity:0;transition:opacity .5s;pointer-events:none;z-index:3; }
+.rain-room .rr-window-note.visible { opacity:1; }
+.rain-room .rr-room figcaption { padding-top:15px;display:flex;justify-content:space-between;gap:15px;font:300 .56rem/1.6 var(--font-sans);letter-spacing:.16em;text-transform:uppercase;color:#7d8174; }
+.rain-room .rr-book-button { position:absolute;left:31%;top:79%;width:23%;height:9%;border:0;background:transparent;cursor:pointer;z-index:3; }
+.rain-room .rr-book-button:focus-visible { outline:1px solid #66735f; }
+.rain-room .rr-book-note { position:absolute;left:28%;top:74%;color:#53634e;background:#ece5d4;padding:4px 8px;font:italic .85rem var(--font-serif);opacity:0;pointer-events:none;transition:opacity .5s;z-index:3; }
+.rain-room .rr-book-note.visible { opacity:1; }
+.rain-room .rr-footer { flex:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:0 clamp(24px,5vw,76px) 27px;color:#7b806f; }
+.rain-room .rr-footer p { font:italic 1rem/1.5 var(--font-serif); }
+.rain-room .room-actions { margin:0;flex-wrap:wrap;gap:22px;justify-content:flex-end; }
+.rain-room .room-actions button { font:400 .62rem var(--font-sans);letter-spacing:.08em;color:#69705f;background:transparent;border:0;border-bottom:1px solid #b4b5a5;border-radius:0;padding:10px 0;min-height:40px;cursor:pointer; }
+.rain-room .room-actions button:hover { color:#876442;border-color:#876442; }
+.rain-room button:focus-visible { outline:2px solid #8c7652;outline-offset:5px; }
+.rain-room .rr-curtain { transform-box:fill-box;transform-origin:top center;animation:rr-sway 9s ease-in-out infinite alternate; }
+.rain-room .rr-curtain-right { animation-delay:-4s; }
+.rain-room .rr-rain { animation:rr-drizzle 3.8s linear infinite; }
+.rain-room .rr-steam { animation:rr-steam 5s ease-in-out infinite; }
+.rain-room:not(.active) *, .rain-room[inert] * { animation-play-state:paused!important; }
+/* Existing STAY HERE behaviour: a tap on the room or Escape restores controls. */
+.rain-room.is-staying .rr-copy { opacity:.25;transition:opacity 1.4s; }
+@keyframes rr-drizzle { from { transform:translateY(-12px);opacity:.25; } 50% {opacity:.5;} to {transform:translateY(16px);opacity:.25;} }
+@keyframes rr-sway { from {transform:skewX(-.35deg);} to {transform:skewX(.5deg);} }
+@keyframes rr-steam { 0%,100% {opacity:.3;transform:translateY(1px);} 50% {opacity:.7;transform:translateY(-5px);} }
+@keyframes rr-ripple { 0% {opacity:.8;transform:translate(-50%,-50%) scale(.3);} 100% {opacity:0;transform:translate(-50%,-50%) scale(3.5);} }
+@media(min-width:1500px) { .rain-room .rr-layout { max-width:1480px; } }
+@media(max-width:850px) {
+ .rain-room .rr-layout { grid-template-columns:1fr;gap:26px;padding:38px 24px 28px;max-width:660px; }
+ .rain-room .rr-copy { padding:0;text-align:center; }
+ .rain-room .rr-kicker,.rain-room .rr-subtitle,.rain-room .rr-caption { max-width:none; }
+ .rain-room h2 { font-size:4.3rem;margin:12px 0; }
+ .rain-room .rr-subtitle { font-size:1.2rem; }
+ .rain-room .rr-divider { margin:20px auto 14px; }
+ .rain-room .rr-invitation { font-size:1.1rem; }
+ .rain-room .rr-caption { margin-top:5px;font-size:.65rem; }
+ .rain-room .rr-footer { flex-direction:column;gap:10px;padding:0 24px 24px; }
+ .rain-room .room-actions { justify-content:center; }
+}
+@media(max-width:420px) {
+ .rain-room .rr-layout { padding-left:14px;padding-right:14px; }
+ .rain-room h2 { font-size:3.6rem; }
+ .rain-room .rr-kicker { font-size:.56rem; }
+ .rain-room .rr-room figcaption { font-size:.5rem;letter-spacing:.1em; }
+ .rain-room .rr-window-note { font-size:.8rem; }
+}
+@media(prefers-reduced-motion:reduce) { .rain-room *, .rain-room *::after { animation:none!important;transition:none!important; } .rain-room .rr-window-button.is-wiped::after { opacity:.55; } }
+
+.rain-room .rr-illustration { position:relative; }
+.rain-room .rr-book-button { min-height:36px; }
+
+/* Real, labelled keys: positions stay stable so a melody can be learned. */
+.rain-room .rr-piano { position:absolute;left:27%;top:20%;width:47%;height:40%;display:grid;grid-template-columns:repeat(4,minmax(44px,1fr));gap:12px 4px;align-content:center;justify-items:center;z-index:4; }
+.rain-room .rr-note { position:relative;min-width:44px;width:100%;max-width:64px;min-height:60px;border:0;border-radius:0;background:transparent;cursor:pointer;color:#fff9e8;padding:0;touch-action:manipulation; }
+.rain-room .rr-note svg { display:block;width:40px;height:50px;margin:0 auto;overflow:visible; }
+.rain-room .rr-note svg path:first-child { fill:#b9cfca88;stroke:#e6f1e2;stroke-width:1; }
+.rain-room .rr-drop-shine { fill:none;stroke:#f6f2da;stroke-width:1.5;opacity:.65; }
+.rain-room .rr-note span { display:block;font:400 .7rem var(--font-sans);text-shadow:0 1px 2px #31484c; }
+.rain-room .rr-note small { margin-left:4px;opacity:.7;font-size:.6rem; }
+.rain-room .rr-note:hover svg path:first-child { fill:#e7d5a7aa; }
+.rain-room .rr-note.is-struck svg path:first-child { fill:#f0d393;stroke:#fff4cc; }
+.rain-room .rr-note.is-struck svg { animation:rr-note-pulse .45s ease-out; }
+.rain-room .rr-note.is-next { outline:1px dashed #f7dfa9;outline-offset:1px; }
+.rain-room .rr-note:focus-visible { outline:2px solid #fff4d7;outline-offset:3px; }
+.rain-room .rr-piano-controls { margin-top:22px;max-width:310px; }
+.rain-room .rr-piano-controls p { font:300 .66rem/1.65 var(--font-sans);color:#606b5b;min-height:2.6em; }
+.rain-room .rr-piano-controls label { display:flex;justify-content:space-between;margin:12px 0 6px;font:400 .65rem var(--font-sans); }
+.rain-room #rain-piano-volume { width:100%;height:24px;accent-color:#6a7b63; }
+.rain-room #rain-guide,.rain-room #rain-change-quote { background:none;border:0;border-bottom:1px solid #a5ac98;border-radius:0;color:#596850;padding:10px 0;min-height:44px;font:400 .65rem var(--font-sans);cursor:pointer; }
+.rain-room #rain-guide[aria-pressed="true"] { color:#7b5b30;border-color:#7b5b30; }
+.rain-room #rain-guide-progress { margin-top:9px; }
+.rain-room .rr-piano-tip { margin-top:8px;opacity:.8; }
+.rain-room .rr-quote { max-width:440px; }
+.rain-room .rr-footer { align-items:flex-start; }
+.rain-room.rr-paused * { animation-play-state:paused!important; }
+@keyframes rr-note-pulse { 0% {transform:scale(.88);} 45% {transform:scale(1.13);} 100% {transform:scale(1);} }
+@media(max-width:850px) {
+ .rain-room .rr-piano-controls { max-width:340px;margin:20px auto 0; }
+ .rain-room .rr-copy { padding-bottom:0; }
+ .rain-room .rr-footer { align-items:center;text-align:center; }
+}
+@media(max-width:480px) {
+ .rain-room .rr-piano { grid-template-columns:repeat(3,minmax(44px,1fr));left:28%;width:44%;top:13%;height:55%;gap:3px 0; }
+ .rain-room .rr-note { min-height:44px; }
+ .rain-room .rr-note svg { width:25px;height:29px; }
+ .rain-room .rr-note span { font-size:.6rem; }
+ .rain-room .rr-note small { font-size:.55rem; }
+}
+@media(prefers-reduced-motion:reduce) { .rain-room .rr-note.is-struck svg { animation:none!important; } }
+
+/* Keep an accessible way out even in quiet viewing mode. */
+.rain-room.is-staying .room-nav, .rain-room.is-staying .room-actions { opacity:1;pointer-events:auto; }

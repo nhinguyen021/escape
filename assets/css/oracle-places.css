@@ -1,0 +1,22 @@
+/* Only the five new objects; existing scene layout stays intact. */
+.oracle-discovery.oracle-discovered .oracle-found-hint::after { content:' · đã tìm thấy · đọc lại'; display:block; font-size:10px; opacity:.85; }
+.oracle-discovery.oracle-discovered .oracle-found-card { border-style:double; }
+.oracle-discovery { position:relative; display:inline-flex; align-items:center; gap:8px; min-width:44px; min-height:44px; padding:6px; border:0; background:transparent; color:#f5e4bf; cursor:pointer; font:italic 13px/1.4 var(--font-serif,Georgia,serif); z-index:4; touch-action:manipulation; }
+.oracle-found-card { display:grid; place-items:center; flex:none; width:36px; height:50px; border:1px solid currentColor; outline:1px solid #d9c29770; outline-offset:-5px; border-radius:3px; background:#263336; box-shadow:2px 4px 6px #0005,0 0 12px #e3c99a30; font-size:23px; transform:rotate(-12deg); transition:transform .25s,box-shadow .25s; }
+.oracle-found-hint { max-width:110px; text-align:left; text-shadow:0 1px 4px #000; }
+.oracle-discovery:hover .oracle-found-card,.oracle-discovery:focus-visible .oracle-found-card { transform:rotate(0deg) translateY(-3px); box-shadow:2px 4px 6px #0005,0 0 18px #e3c99a80; }
+.oracle-discovery:focus-visible { outline:2px solid #ffe2ac; outline-offset:4px; border-radius:3px; }
+.oracle-discovery--sea { position:absolute; top:46%; right:1%; flex-direction:column; gap:2px; width:64px; color:#ffefd1; }
+.oracle-discovery--sea .oracle-found-hint { font-size:11px; text-align:center; }
+.oracle-discovery--rainy { position:absolute; right:7%; top:71%; padding:2px; }
+.oracle-discovery--rainy .oracle-found-card { width:30px; height:44px; background:#6a503a; }
+.oracle-discovery--rainy .oracle-found-hint { max-width:75px; font-size:12px; background:#1c2424c9; padding:3px; }
+.oracle-discovery--quiet { margin:8px auto 4px; color:#dfe6b6; }
+.oracle-discovery--quiet .oracle-found-card { background:#364b35; }
+.oracle-discovery--city { margin-top:20px; color:#eab7d5; }
+.oracle-discovery--city .oracle-found-card { background:#343045; box-shadow:0 0 14px #d990b74d; }
+#neon-city:not([data-location="alley"]) .oracle-discovery--city { display:none; }
+.oracle-discovery--impossible { display:flex; width:fit-content; margin:18px auto; color:#dac9ed; }
+.oracle-discovery--impossible .oracle-found-card { background:#3c3451; }
+@media(max-width:480px) { .oracle-discovery--rainy .oracle-found-hint { max-width:60px; font-size:10px; } }
+@media(prefers-reduced-motion:reduce) { .oracle-found-card { transition:none; } .oracle-discovery:hover .oracle-found-card,.oracle-discovery:focus-visible .oracle-found-card { transform:rotate(-12deg); } }

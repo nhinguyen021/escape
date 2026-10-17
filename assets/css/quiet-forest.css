@@ -1,0 +1,74 @@
+/* Quiet Forest: visual foundation only. All rules are scene-scoped. */
+.quiet-forest-scene { --qf-cream:#f1ead8;--qf-muted:#c5c5a7;position:fixed;inset:0;z-index:40;overflow-y:auto;overflow-x:hidden;background:#26372d;color:var(--qf-cream);opacity:0;visibility:hidden;pointer-events:none;isolation:isolate;transition:opacity 1s var(--ease-poetic); }
+.quiet-forest-scene.active { opacity:1;visibility:visible;pointer-events:auto; }
+.quiet-forest-scene[inert] { visibility:hidden!important;pointer-events:none!important; }
+.quiet-forest-scene .qf-landscape { position:absolute;inset:0;min-height:800px;background:url('../art/quiet-forest.svg') center 55%/cover no-repeat;z-index:-3; }
+.quiet-forest-scene .qf-shade { position:absolute;inset:0;min-height:800px;z-index:-2;background:linear-gradient(180deg,#101d2380 0%,#172a2920 45%,#14281c10 65%,#15241d99 100%);pointer-events:none; }
+.quiet-forest-scene .qf-texture { position:absolute;inset:0;min-height:800px;z-index:-1;opacity:.08;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath d='M0 0h160v160H0z' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");background-size:160px; }
+.quiet-forest-scene .quiet-back { background:#18291d55;border-color:#e4dfc22b;color:#e1dfcd; }
+.quiet-forest-scene .qf-content { position:relative;min-height:800px;min-height:max(800px,100svh);display:flex;flex-direction:column;padding:clamp(112px,16vh,160px) clamp(24px,6vw,90px) 27px; }
+.quiet-forest-scene .qf-intro { text-align:center;margin:0 auto;max-width:700px; }
+.quiet-forest-scene .qf-eyebrow { font:400 .6rem/1.8 var(--font-sans);letter-spacing:.27em;color:#d1d1b5; }
+.quiet-forest-scene h2 { margin:22px 0 20px;font:300 clamp(3.7rem,6.4vw,6.7rem)/.97 var(--font-serif);letter-spacing:-.025em;text-shadow:0 2px 20px #1a2a2445; }
+.quiet-forest-scene h2 em { font-weight:300;color:#eadbb3; }
+.quiet-forest-scene .qf-support { font:italic 400 clamp(1.1rem,1.6vw,1.35rem)/1.6 var(--font-serif);color:#dbddc7; }
+.quiet-forest-scene .qf-garden { margin:auto auto 28px;padding-top:70px;width:min(480px,100%);text-align:center; }
+.quiet-forest-scene .qf-earth { width:clamp(240px,30vw,420px);max-width:100%;height:105px;margin:0 auto;position:relative;border-radius:49% 46% 45% 48%;background:radial-gradient(ellipse at 52% 35%,#796249,#584532 62%,#3c3929 83%);box-shadow:0 12px 22px #101d1a38,inset 0 -8px 12px #292c1d80;border-bottom:5px solid #34432b; }
+.quiet-forest-scene .qf-earth::before { content:'';position:absolute;inset:9px 19px 18px;border-radius:50%;opacity:.6;background:radial-gradient(ellipse,#bca17a 0 1px,transparent 2px) 0 0/31px 19px,radial-gradient(ellipse,#362d23 0 1px,transparent 2px) 12px 7px/23px 21px; }
+.quiet-forest-scene .qf-earth::after { content:'';position:absolute;left:7%;right:7%;bottom:-3px;height:18px;border-radius:50%;border-bottom:4px solid #667348;opacity:.7; }
+.quiet-forest-scene .qf-stone { position:absolute;width:22px;height:13px;background:#85826b;border-radius:46% 55% 36% 51%;box-shadow:inset -3px -3px 0 #666854; }
+.quiet-forest-scene .qf-stone-one { left:8%;top:72%;transform:rotate(-15deg); }
+.quiet-forest-scene .qf-stone-two { right:8%;top:25%;width:15px;height:9px; }
+.quiet-forest-scene .qf-leaf { position:absolute;right:14%;bottom:0;width:30px;height:14px;border-radius:0 90% 0 90%;background:#988151;transform:rotate(-25deg);border-bottom:1px solid #b19c69; }
+.quiet-forest-scene figcaption { margin-top:14px; }
+.quiet-forest-scene .qf-garden-line { display:block;width:1px;height:21px;background:#c3b78c66;margin:0 auto 11px; }
+.quiet-forest-scene h3 { font:400 1.5rem var(--font-serif);color:#e1d6b8; }
+.quiet-forest-scene figcaption p { font:300 .65rem/1.8 var(--font-sans);color:var(--qf-muted);margin-top:7px; }
+.quiet-forest-scene .qf-footer { display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:20px;font:italic .9rem var(--font-serif);color:#c1c6ac; }
+.quiet-forest-scene .qf-footer span:first-child { font:300 .6rem/1.8 var(--font-sans);letter-spacing:.18em;text-transform:uppercase; }
+@media(max-width:600px) {
+ .quiet-forest-scene .qf-landscape { background-position:58% center; }
+ .quiet-forest-scene .qf-content { padding:110px 22px 22px;min-height:max(800px,100svh); }
+ .quiet-forest-scene h2 { font-size:3.8rem; }
+ .quiet-forest-scene .qf-eyebrow { font-size:.52rem;letter-spacing:.2em; }
+ .quiet-forest-scene .qf-garden { padding-top:90px;margin-bottom:22px; }
+ .quiet-forest-scene .qf-earth { height:88px;width:270px; }
+ .quiet-forest-scene .qf-footer { font-size:.8rem; }
+}
+@media(prefers-reduced-motion:reduce) { .quiet-forest-scene { transition:none; } }
+
+/* Plant care: four stages, finite feedback animations, no gameplay clock. */
+.quiet-forest-scene .qf-landscape,.quiet-forest-scene .qf-shade,.quiet-forest-scene .qf-texture { position:fixed;min-height:0; }
+.quiet-forest-scene .qf-garden { padding-top:220px; }
+.quiet-forest-scene .qf-plant-feedback { position:absolute;left:50%;bottom:42%;width:180px;height:210px;transform:translateX(-50%);pointer-events:none; }
+.quiet-forest-scene .qf-plant { position:absolute;inset:0;width:100%;height:100%;overflow:visible; }
+.quiet-forest-scene .qf-plant-stage { opacity:0;transform:scale(.85);transform-box:fill-box;transform-origin:bottom center;transition:opacity .6s ease,transform .9s var(--ease-poetic); }
+.quiet-forest-scene [data-stage="0"] .qf-seed,.quiet-forest-scene [data-stage="1"] .qf-seedling,.quiet-forest-scene [data-stage="2"] .qf-grown,.quiet-forest-scene [data-stage="3"] .qf-bloom { opacity:1;transform:scale(1); }
+.quiet-forest-scene .is-planting .qf-seed { animation:qf-seed-settle .8s ease-out; }
+.quiet-forest-scene .qf-petals { transform:scale(.35);transform-origin:94px 62px;opacity:0;transition:transform 1.2s ease .2s,opacity .9s ease .2s; }
+.quiet-forest-scene [data-stage="3"] .qf-petals { opacity:1;transform:scale(1); }
+.quiet-forest-scene .qf-water-drop { position:absolute;z-index:2;top:46px;left:60px;width:5px;height:10px;border-radius:60% 40% 60% 40%;background:#ccdeda;opacity:0; }
+.quiet-forest-scene .qf-water-drop:nth-child(2) { left:90px;top:31px;animation-delay:.12s; }
+.quiet-forest-scene .qf-water-drop:nth-child(3) { left:117px;top:50px;animation-delay:.24s; }
+.quiet-forest-scene .is-watering .qf-water-drop { animation-name:qf-water;animation-duration:.85s;animation-timing-function:ease-in; }
+.quiet-forest-scene .qf-plant-feedback::after { content:'';position:absolute;bottom:-8px;left:35px;right:35px;height:15px;background:#302e2280;border-radius:50%;opacity:0; }
+.quiet-forest-scene .is-watering::after { animation:qf-wet-soil 1.5s ease; }
+.quiet-forest-scene .qf-sun-halo { position:absolute;left:0;top:-20px;width:180px;height:180px;border-radius:50%;background:radial-gradient(ellipse,#e0c88130,transparent 68%);opacity:0; }
+.quiet-forest-scene .is-sunlight .qf-sun-halo,.quiet-forest-scene .is-blooming .qf-sun-halo { animation:qf-golden-light 2.2s ease-out; }
+.quiet-forest-scene #forest-stage { margin-top:12px;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:#c6cbaa; }
+.quiet-forest-scene #forest-quote { font:italic 1.25rem/1.5 var(--font-serif);color:#f1e5c4;min-height:1.5em;margin-top:7px; }
+.quiet-forest-scene #forest-garden-description { min-height:2em; }
+.quiet-forest-scene .qf-garden-actions { display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px; }
+.quiet-forest-scene .qf-garden-actions button,.quiet-forest-scene #forest-restart { min-height:44px;border:1px solid #b4ba9560;border-radius:3px;padding:10px 16px;font:400 .7rem var(--font-sans);letter-spacing:.04em;background:#243a2b99;color:#eee7cd;cursor:pointer; }
+.quiet-forest-scene .qf-garden-actions button:disabled { opacity:.38;cursor:default; }
+.quiet-forest-scene .qf-garden-actions button:not(:disabled):hover { background:#516143; }
+.quiet-forest-scene #forest-restart { margin-top:14px;border:0;border-bottom:1px solid #acae864d;background:none;padding:8px 0;color:#d8d4b6; }
+.quiet-forest-scene #forest-restart[hidden] { display:none; }
+.quiet-forest-scene .qf-garden button:focus-visible { outline:2px solid #efdfb3;outline-offset:4px; }
+.quiet-forest-scene[inert] .qf-plant-feedback * { animation-play-state:paused; }
+@keyframes qf-seed-settle { from {transform:translateY(-22px) rotate(-15deg);opacity:.2;} to {transform:translateY(0) rotate(0);opacity:1;} }
+@keyframes qf-water { 0% {opacity:0;transform:translateY(0);} 20% {opacity:.8;} 100% {opacity:0;transform:translateY(145px);} }
+@keyframes qf-wet-soil { 0%,100% {opacity:0;} 40% {opacity:.6;} }
+@keyframes qf-golden-light { 0%,100% {opacity:0;} 35% {opacity:1;} }
+@media(max-width:600px) { .quiet-forest-scene .qf-garden { padding-top:210px; } .quiet-forest-scene #forest-quote { font-size:1.15rem; } .quiet-forest-scene .qf-garden-actions { gap:6px; } }
+@media(prefers-reduced-motion:reduce) { .quiet-forest-scene .qf-plant-feedback *,.quiet-forest-scene .qf-plant-feedback::after { animation:none!important;transition:none!important; } }

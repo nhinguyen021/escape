@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="ESCAPE — Nơi bạn tìm về khi cần một chốn bình yên. Where do you go when you need to escape?">
-  <title>ESCAPE — WHERE DO YOU GO WHEN YOU NEED TO ESCAPE?</title>
+  <title>ESCAPE — BẠN ĐI ĐÂU KHI MUỐN TRỐN MỘT CHÚT?</title>
   
   <!-- Poetic Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,10 +13,49 @@
   
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/atmosphere.css">
+  <link rel="stylesheet" href="assets/css/sea.css">
+  <link rel="stylesheet" href="assets/css/rain-room.css">
+  <link rel="stylesheet" href="assets/css/quiet-forest.css">
+  <link rel="stylesheet" href="assets/css/neon-city.css">
+  <link rel="stylesheet" href="assets/css/impossible.css">
+  <link rel="stylesheet" href="assets/css/place-oracle.css">
+  <link rel="stylesheet" href="assets/css/oracle-places.css">
 </head>
 <body>
   <!-- Ambient Atmospheric Layers -->
   <div class="viewport-backdrop">
+    <!-- Base ambient midnight darkness -->
+    <div class="base-ambient-bg" aria-hidden="true"></div>
+
+    <!-- Doorway light portal (Ajar door light on ESCAPE hover/focus) -->
+    <div class="doorway-portal" id="doorway-portal" aria-hidden="true">
+      <div class="door-slit"></div>
+      <div class="door-bloom"></div>
+    </div>
+
+    <!-- Selection Scene Atmospheres (Crossfade on destination card hover/focus) -->
+    <div class="atmosphere-canvas-group" id="atmosphere-canvas-group" aria-hidden="true">
+      <div class="theme-layer theme-rainy" data-theme="rainy">
+        <div class="theme-glow rainy-glow"></div>
+      </div>
+      <div class="theme-layer theme-sea" data-theme="sea">
+        <div class="theme-glow sea-dusk"></div>
+        <div class="sea-wave-shimmer"></div>
+      </div>
+      <div class="theme-layer theme-quiet" data-theme="quiet">
+        <div class="theme-glow quiet-forest"></div>
+        <div class="quiet-mist"></div>
+      </div>
+      <div class="theme-layer theme-city" data-theme="city">
+        <div class="theme-glow city-twilight"></div>
+        <div class="city-neon-bokeh"></div>
+      </div>
+      <div class="theme-layer theme-impossible" data-theme="impossible">
+        <div class="theme-glow impossible-nebula"></div>
+        <div class="impossible-stardust"></div>
+      </div>
+    </div>
+
     <!-- Rainy Canvas (Depth & Droplets) -->
     <canvas id="rain-canvas" aria-hidden="true"></canvas>
 
@@ -33,41 +72,84 @@
     <div class="vignette" aria-hidden="true"></div>
   </div>
 
-  <!-- Main Experience Container -->
-  <div class="experience-wrapper">
-    <!-- Subtle Top Bar -->
-    <header class="top-nav">
-      <div class="nav-brand">
-        <span class="brand-title">E S C A P E</span>
-      </div>
-      
-      <!-- Audio Ambience Controller -->
-      <button id="audio-toggle" class="sound-toggle" aria-label="Bật hoặc tắt nhạc lo-fi" title="Bật/tắt nhạc">
-        <span class="sound-icon">
-          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none">
-            <path class="speaker" d="M11 5L6 9H2v6h4l5 4V5z"/>
-            <path class="wave wave-1" d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-            <path class="wave wave-2" d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-            <line class="mute-line" x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="1.5"/>
-          </svg>
-        </span>
-        <span class="sound-label">nhạc: <span id="sound-status">tắt</span></span>
-      </button>
-    </header>
+  <!-- Persistent Global Header (Audio controller & brand accessible across all screens) -->
+  <header id="global-header" class="global-header" aria-label="Điều hướng chính">
+    <div class="nav-brand">
+      <span class="brand-title">E S C A P E</span>
+    </div>
+    
+    <!-- Audio Ambience Controller with Separate Music & Rain Sliders (Always accessible) -->
+    <div class="audio-controller-widget" id="audio-widget">
+      <div class="sound-toggle-group">
+        <button id="audio-toggle" class="sound-toggle" aria-label="Bật hoặc tắt âm thanh không gian" title="Bật/tắt âm thanh" type="button">
+          <span class="sound-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none">
+              <path class="speaker" d="M11 5L6 9H2v6h4l5 4V5z"/>
+              <path class="wave wave-1" d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path class="wave wave-2" d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+              <line class="mute-line" x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </span>
+          <span class="sound-label">âm thanh: <span id="sound-status">tắt</span></span>
+        </button>
 
+        <button id="audio-panel-btn" class="sound-panel-btn" aria-label="Tùy chỉnh âm lượng nhạc và tiếng mưa" title="Tùy chỉnh âm lượng" type="button" aria-expanded="false">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none" aria-hidden="true">
+            <line x1="4" y1="7" x2="20" y2="7"/>
+            <line x1="4" y1="17" x2="20" y2="17"/>
+            <circle cx="8" cy="7" r="2.5" fill="currentColor"/>
+            <circle cx="16" cy="17" r="2.5" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Expandable Audio Controls Panel -->
+      <div class="audio-panel" id="audio-panel" aria-label="Bảng điều khiển âm lượng" aria-hidden="true">
+        <div class="audio-panel-inner">
+          <!-- Music Channel -->
+          <div class="audio-channel">
+            <div class="channel-header">
+              <span class="channel-name">♫ Nhạc nền</span>
+              <span class="channel-pct" id="music-vol-val">65%</span>
+            </div>
+            <div class="slider-track-wrap">
+              <input type="range" id="music-vol-slider" min="0" max="100" value="65" step="1" aria-label="Âm lượng nhạc nền">
+            </div>
+          </div>
+
+          <!-- Rain Channel (Góc mưa) -->
+          <div class="audio-channel" id="rain-channel-group">
+            <div class="channel-header">
+              <span class="channel-name">🌧 Tiếng mưa</span>
+              <span class="channel-status-badge" id="rain-status-badge">chỉ trong Góc mưa</span>
+              <span class="channel-pct" id="rain-vol-val">60%</span>
+            </div>
+            <div class="slider-track-wrap">
+              <input type="range" id="rain-vol-slider" min="0" max="100" value="60" step="1" aria-label="Âm lượng tiếng mưa">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Screen 1: Main Experience Container (Hero Section) -->
+  <div class="experience-wrapper" id="hero-scene">
     <!-- Emotional Focus: Hero Section -->
     <main class="hero-content">
       <div class="quote-container">
         <p class="scene-prelude">khoảng lặng bình yên</p>
         
         <h1 class="core-question">
-          <span class="line-1">WHERE DO YOU GO</span>
-          <span class="line-2">WHEN YOU NEED TO ESCAPE?</span>
+          <span class="line-1">BẠN MUỐN ĐI ĐÂU</span>
+          <span class="line-2">KHI CẦN MỘT KHOẢNG LẶNG?</span>
         </h1>
 
+        <p class="hero-subline">Chọn một nơi. Để những bộn bề ở lại.</p>
+
         <div class="cta-wrapper">
-          <button id="enter-btn" class="subtle-cta" aria-label="Chọn một chốn để trốn vào">
-            <span class="cta-text">ESCAPE →</span>
+          <button id="enter-btn" class="subtle-cta" aria-label="ESCAPE — Chọn một chốn để trốn vào" type="button">
+            <span class="cta-text">ESCAPE &rarr;</span>
             <span class="cta-line"></span>
           </button>
         </div>
@@ -83,281 +165,370 @@
     </footer>
   </div>
 
-  <!-- Scene 2: an emotional, atmospheric destination selection -->
-  <section id="selection-scene" class="selection-scene" aria-hidden="true">
-    <button id="selection-back" class="quiet-back" aria-label="Quay lại màn hình đầu">←</button>
+  <!-- Screen 2: Emotional & Atmospheric Destination Selection -->
+  <section id="selection-scene" class="selection-scene" aria-hidden="true" inert>
+    <button id="selection-back" class="quiet-back" aria-label="Quay lại màn mở đầu" title="Quay lại" type="button">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span class="back-text">trở về</span>
+    </button>
+
     <div class="selection-inner">
-      <p class="selection-kicker">chọn một khoảng lặng</p>
-      <h2>Where would you go?</h2>
-      <div class="destination-list" role="list">
-        <button class="destination rainy" data-destination="rainy" role="listitem"><span>Somewhere Rainy</span><i>mưa rơi ngoài khung cửa</i></button>
-        <button class="destination sea" data-destination="sea" role="listitem"><span>Somewhere by the Sea</span><i>một đường chân trời rộng mở</i></button>
-        <button class="destination quiet" data-destination="quiet" role="listitem"><span>Somewhere Quiet</span><i>nơi mọi thanh âm chậm lại</i></button>
-        <button class="destination city" data-destination="city" role="listitem"><span>Somewhere in the City</span><i>những ô cửa còn sáng</i></button>
-        <button class="destination impossible" data-destination="impossible" role="listitem"><span>Somewhere Impossible</span><i>một nơi chỉ có trong giấc mơ</i></button>
+      <header class="selection-header">
+        <p class="selection-kicker">chọn một khoảng lặng</p>
+        <h2 class="selection-title">BẠN MUỐN GHÉ NƠI NÀO?</h2>
+      </header>
+
+      <div class="destination-grid" role="list">
+        <!-- 1. Rainy -->
+        <button class="destination-card rainy" data-destination="rainy" role="listitem" aria-label="Góc mưa — Một căn phòng, ô cửa sổ và chẳng cần đi đâu." type="button">
+          <div class="card-ambient-accent" aria-hidden="true"></div>
+          <div class="card-content">
+            <div class="card-badge">
+              <span class="badge-num">01</span>
+              <span class="badge-dot"></span>
+            </div>
+            <h3 class="card-title">Góc mưa</h3>
+            <p class="card-desc">Một căn phòng, ô cửa sổ và chẳng cần đi đâu.</p>
+          </div>
+          <div class="card-indicator" aria-hidden="true">
+            <span class="indicator-arrow">&rarr;</span>
+          </div>
+        </button>
+
+        <!-- 2. Sea -->
+        <button class="destination-card sea" data-destination="sea" role="listitem" aria-label="Bên biển — Gió mặn. Chân trần. Không thông báo." type="button">
+          <div class="card-ambient-accent" aria-hidden="true"></div>
+          <div class="card-content">
+            <div class="card-badge">
+              <span class="badge-num">02</span>
+              <span class="badge-dot"></span>
+            </div>
+            <h3 class="card-title">Bên biển</h3>
+            <p class="card-desc">Gió mặn. Chân trần. Không thông báo.</p>
+          </div>
+          <div class="card-indicator" aria-hidden="true">
+            <span class="indicator-arrow">&rarr;</span>
+          </div>
+        </button>
+
+        <!-- 3. Quiet -->
+        <button class="destination-card quiet" data-destination="quiet" role="listitem" aria-label="Rừng yên — Thế giới có thể đợi." type="button">
+          <div class="card-ambient-accent" aria-hidden="true"></div>
+          <div class="card-content">
+            <div class="card-badge">
+              <span class="badge-num">03</span>
+              <span class="badge-dot"></span>
+            </div>
+            <h3 class="card-title">Rừng yên</h3>
+            <p class="card-desc">Thế giới có thể đợi.</p>
+          </div>
+          <div class="card-indicator" aria-hidden="true">
+            <span class="indicator-arrow">&rarr;</span>
+          </div>
+        </button>
+
+        <!-- 4. City -->
+        <button class="destination-card city" data-destination="city" role="listitem" aria-label="Sài Gòn về đêm — Đèn phố, tiếng rao và những cuộc gặp dễ thương." type="button">
+          <div class="card-ambient-accent" aria-hidden="true"></div>
+          <div class="card-content">
+            <div class="card-badge">
+              <span class="badge-num">04</span>
+              <span class="badge-dot"></span>
+            </div>
+            <h3 class="card-title">Sài Gòn về đêm</h3>
+            <p class="card-desc">Đèn phố, tiếng rao và những cuộc gặp dễ thương.</p>
+          </div>
+          <div class="card-indicator" aria-hidden="true">
+            <span class="indicator-arrow">&rarr;</span>
+          </div>
+        </button>
+
+        <!-- 5. Impossible -->
+        <button class="destination-card impossible" data-destination="impossible" role="listitem" aria-label="Miền mộng tưởng — Mơ một chút, có sao đâu?" type="button">
+          <div class="card-ambient-accent" aria-hidden="true"></div>
+          <div class="card-content">
+            <div class="card-badge">
+              <span class="badge-num">05</span>
+              <span class="badge-dot"></span>
+            </div>
+            <h3 class="card-title">Miền mộng tưởng</h3>
+            <p class="card-desc">Mơ một chút, có sao đâu?</p>
+          </div>
+          <div class="card-indicator" aria-hidden="true">
+            <span class="indicator-arrow">&rarr;</span>
+          </div>
+        </button>
       </div>
     </div>
   </section>
 
   <!-- A small atmospheric holding space for worlds not written yet -->
-  <section id="preview-scene" class="preview-scene" aria-hidden="true">
-    <button id="preview-back" class="quiet-back" aria-label="Quay lại danh sách chốn trốn">←</button>
+  <section id="preview-scene" class="preview-scene" aria-hidden="true" inert>
+    <button id="preview-back" class="quiet-back" aria-label="Quay lại danh sách chốn trốn" title="Quay lại" type="button">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.5" fill="none" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span class="back-text">trở về</span>
+    </button>
     <div class="preview-copy">
       <p id="preview-title"></p>
       <span>đang được viết dở...</span>
     </div>
+    <section id="impossible-world" aria-labelledby="impossible-heading">
+      <div id="imp-garden">
+      <div class="imp-landscape" role="img" aria-label="Khu vườn cổ tích dưới trăng: cổng đá phủ rêu, cây cổ thụ xoắn, hoa phát sáng và nấm nhỏ"></div>
+      <div class="imp-mist" aria-hidden="true"></div><div class="imp-fireflies" aria-hidden="true"><i style="--x:7%;--y:18%;--delay:-0s"></i><i style="--x:44%;--y:41%;--delay:-1s"></i><i style="--x:81%;--y:64%;--delay:-2s"></i><i style="--x:22%;--y:5%;--delay:-3s"></i><i style="--x:59%;--y:28%;--delay:-4s"></i><i style="--x:0%;--y:51%;--delay:-5s"></i><i style="--x:37%;--y:74%;--delay:-6s"></i><i style="--x:74%;--y:15%;--delay:-7s"></i><i style="--x:15%;--y:38%;--delay:-8s"></i><i style="--x:52%;--y:61%;--delay:-9s"></i><i style="--x:89%;--y:2%;--delay:-10s"></i><i style="--x:30%;--y:25%;--delay:-11s"></i><i style="--x:67%;--y:48%;--delay:-12s"></i><i style="--x:8%;--y:71%;--delay:-13s"></i><i style="--x:45%;--y:12%;--delay:-14s"></i><i style="--x:82%;--y:35%;--delay:-15s"></i></div>
+      <header class="imp-intro"><p class="imp-eyebrow">CHỐN 05 · SOMEWHERE IMPOSSIBLE</p><h1 id="impossible-heading">Miền mộng tưởng</h1><p>Có những nơi chỉ mở cửa khi bạn cho phép mình mơ.</p></header>
+      <div class="imp-arch-caption"><span aria-hidden="true">✧</span><p>Bên kia cánh cổng, một điều kỳ diệu đang chờ.</p></div>
+      <div class="imp-portals" role="group" aria-label="Bốn cánh cổng cổ tích"><button class="imp-portal imp-moonflower" data-imp-portal="moonflower" type="button" aria-describedby="imp-preview-note"><span class="imp-portal-art"><img src="assets/art/portal-moonflower.svg" alt="" width="300" height="360"><span class="imp-portal-sigil" aria-hidden="true">☾</span></span><span class="imp-portal-name">Vườn hoa trăng</span><span class="imp-portal-en" lang="en">The Moonflower Garden</span><span class="imp-portal-description">Những cánh hoa giữ lại một chút ánh trăng.</span><span class="imp-discovery-badge">Một điều kỳ diệu đang chờ</span><span class="imp-portal-hint">Bước qua cánh cổng <span aria-hidden="true">↗</span></span></button><button class="imp-portal imp-isles" data-imp-portal="isles" type="button" aria-describedby="imp-preview-note"><span class="imp-portal-art"><img src="assets/art/portal-isles.svg" alt="" width="300" height="360"><span class="imp-portal-sigil" aria-hidden="true">◇</span></span><span class="imp-portal-name">Đảo giữa tầng mây</span><span class="imp-portal-en" lang="en">The Floating Isles</span><span class="imp-portal-description">Nơi những hòn đảo trôi qua giấc mơ.</span><span class="imp-discovery-badge">Một điều kỳ diệu đang chờ</span><span class="imp-portal-hint">Bước qua cánh cổng <span aria-hidden="true">↗</span></span></button><button class="imp-portal imp-crystal" data-imp-portal="crystal" type="button" aria-describedby="imp-preview-note"><span class="imp-portal-art"><img src="assets/art/portal-crystal.svg" alt="" width="300" height="360"><span class="imp-portal-sigil" aria-hidden="true">✧</span></span><span class="imp-portal-name">Rừng pha lê</span><span class="imp-portal-en" lang="en">The Crystal Woods</span><span class="imp-portal-description">Lắng nghe khu rừng ngân lên trong ánh ngọc.</span><span class="imp-discovery-badge">Một điều kỳ diệu đang chờ</span><span class="imp-portal-hint">Bước qua cánh cổng <span aria-hidden="true">↗</span></span></button><button class="imp-portal imp-stars" data-imp-portal="stars" type="button" aria-describedby="imp-preview-note"><span class="imp-portal-art"><img src="assets/art/portal-stars.svg" alt="" width="300" height="360"><span class="imp-portal-sigil" aria-hidden="true">✦</span></span><span class="imp-portal-name">Biển sao</span><span class="imp-portal-en" lang="en">The Sea of Stars</span><span class="imp-portal-description">Một mặt hồ ôm cả bầu trời vào lòng.</span><span class="imp-discovery-badge">Một điều kỳ diệu đang chờ</span><span class="imp-portal-hint">Bước qua cánh cổng <span aria-hidden="true">↗</span></span></button></div>
+      <div class="imp-garden-aura" aria-hidden="true"></div><p id="imp-completion" role="status" hidden>Bốn ánh sáng đã gặp nhau. Khu vườn giữ lại chút dịu dàng bạn mang đến.</p>
+      <footer class="imp-footer"><span>Một khu vườn nằm ngoài những điều có thể.</span><p id="imp-preview-note">Chọn một cánh cổng. Bạn luôn có thể trở về khu vườn.</p><p id="imp-save-note" role="status"></p><button id="imp-reset-progress" type="button">Bắt đầu lại Miền mộng tưởng</button></footer>
+      </div>
+      <section id="imp-realm" aria-labelledby="imp-realm-title" hidden>
+        <div class="imp-realm-background" aria-hidden="true"></div>
+        <button id="imp-return" class="imp-return" type="button">← Trở về khu vườn</button>
+        <header class="imp-realm-header"><p id="imp-realm-en" lang="en"></p><h2 id="imp-realm-title" tabindex="-1"></h2><p id="imp-realm-intro"></p></header>
+        <div class="imp-object-space"><button id="imp-object" type="button" aria-describedby="imp-object-help"><span id="imp-object-art" aria-hidden="true"></span><span id="imp-object-label"></span></button></div>
+        <div class="imp-narrative"><p id="imp-object-help">Chạm vật thể sáng · hoặc dùng Tab rồi Enter / Space.</p><p id="imp-discovery" role="status" aria-live="polite"></p></div>
+      </section>
+      <div class="imp-local-fade" aria-hidden="true"></div>
+    </section>
+    <div id="neon-city">
+      <div class="nc-art" aria-hidden="true"><div class="nc-panorama"></div><div class="nc-haze"></div><div class="nc-rain"></div><div class="nc-traffic"></div></div>
+      <div class="nc-meta"><span>Chốn 04 / Sài Gòn · Chuyện phố</span><span>Một Sài Gòn còn thức</span></div>
+      <div id="nc-entry" class="nc-entry">
+        <p class="nc-eyebrow">Đêm nay, đi chậm một chút</p>
+        <h1>Sài Gòn<br><em>về đêm.</em></h1>
+        <p class="nc-tagline">Lật một trang chuyện phố.<br>Ghé Sài Gòn của những điều thân quen.</p>
+        <button id="nc-enter" class="nc-enter" type="button">Dạo phố thôi <span aria-hidden="true">↗</span></button>
+      </div>
+      <div id="nc-explore" class="nc-explore" hidden>
+        <div class="nc-location-copy">
+          <p class="nc-eyebrow">Bạn đang ở đây</p>
+          <h2 id="nc-location" tabindex="-1" aria-describedby="nc-message">Tiệm bánh mì</h2>
+          <p id="nc-message" aria-live="polite">Ổ bánh nóng giòn, gói theo một lời chào.</p>
+        </div>
+        <div class="nc-landmark"><span class="nc-coordinate" id="nc-coordinate"></span><button id="nc-interact" type="button">Đón khách ở tiệm bánh mì</button><section id="nc-event" aria-label="Quầy hàng tương tác" hidden></section></div>
+        <div class="nc-controls" role="group" aria-label="Dạo phố Sài Gòn">
+          <p>Cứ thong thả dạo chơi.</p>
+          <ul class="nc-map" aria-label="Bản đồ khu phố: phía trên là hướng đi lên">
+            <li><button type="button" data-nc-place="alley">Tiệm bánh mì</button></li>
+            <li><button type="button" data-nc-place="market">Xe nước mía</button></li>
+            <li><button type="button" data-nc-place="corner">Cà phê phin</button></li>
+            <li><button type="button" data-nc-place="ramen">Quán hủ tiếu</button></li>
+          </ul>
+          <div class="nc-dpad" aria-describedby="nc-preview-note">
+            <button type="button" data-nc-direction="north" disabled aria-label="Đi lên (W)">↑ W</button>
+            <button type="button" data-nc-direction="west" disabled aria-label="Đi trái (A)">← A</button>
+            <button type="button" data-nc-direction="south" aria-label="Đi xuống (S)">↓ S</button>
+            <button type="button" data-nc-direction="east" aria-label="Đi phải (D)">→ D</button>
+          </div>
+          <p id="nc-preview-note">W lên · A trái · S xuống · D phải. Bấm địa điểm sáng trên bản đồ để ghé chơi; hoặc dùng phím mũi tên.</p>
+          <p id="nc-storage-status" role="status"></p><p id="city-music-status" role="status">Holy Night · bản nhạc bạn chọn</p>
+          <button id="nc-restart" class="nc-text-button" type="button">Bắt đầu chuyến dạo mới</button><br>
+          <button id="nc-entry-back" class="nc-text-button" type="button">← Về lối vào thành phố</button>
+        </div>
+      </div>
+      <div class="nc-footer"><span>Không cần vội. Chẳng phải đến đâu cho kịp.</span><span>Sài Gòn · Chuyện phố · Một chút thân quen.</span></div>
+    </div>
   </section>
 
-  <!-- Scene 2: The Quiet Room at Night -->
-  <section id="room-scene" class="room-scene" aria-hidden="true">
-    <!-- Scene Navigation -->
-    <div class="room-nav">
-      <button id="escape-again" class="room-nav-btn" aria-label="Chọn một chốn khác">
-        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        <span>trốn đi lần nữa</span>
+  <section id="forest-scene" class="quiet-forest-scene" aria-labelledby="forest-heading" aria-hidden="true" inert>
+    <div class="qf-landscape" aria-hidden="true"></div>
+    <div class="qf-shade" aria-hidden="true"></div>
+    <div class="qf-texture" aria-hidden="true"></div>
+    <button id="forest-back" class="quiet-back" type="button" aria-label="Trở về chọn nơi">← <span>trở về</span></button>
+    <div class="qf-content">
+      <header class="qf-intro">
+        <p class="qf-eyebrow">MỘT GÓC THẾ GIỚI THẬT YÊN</p>
+        <h2 id="forest-heading">Cứ lớn lên<br><em>theo nhịp của bạn.</em></h2>
+        <p class="qf-support">Điều đẹp đẽ chẳng cần vội vàng.</p>
+      </header>
+      <figure class="qf-garden" aria-labelledby="forest-garden-label" aria-describedby="forest-garden-description">
+        <div id="forest-earth" class="qf-earth" role="img" aria-label="Mảnh đất đang chờ một hạt mầm"><div id="forest-feedback" class="qf-plant-feedback" aria-hidden="true">
+ <span class="qf-water-drop"></span><span class="qf-water-drop"></span><span class="qf-water-drop"></span>
+ <span class="qf-sun-halo"></span>
+ <svg id="forest-plant" class="qf-plant" viewBox="0 0 180 210" data-stage="empty" aria-hidden="true">
+  <g class="qf-plant-stage qf-seed"><ellipse cx="90" cy="194" rx="10" ry="6" fill="#b7a071" transform="rotate(-25 90 194)"/><path d="m84 195 11-5" fill="none" stroke="#756040" stroke-width="1.5"/></g>
+  <g class="qf-plant-stage qf-seedling"><path d="M90 196Q86 176 91 155" fill="none" stroke="#7e965b" stroke-width="4" stroke-linecap="round"/><path d="M90 173Q63 176 61 155Q81 150 90 173M90 163Q95 140 116 146Q119 163 90 163" fill="#99ae69"/><path d="m68 160 22 13m0-10 20-12" fill="none" stroke="#c0c98b" stroke-width="1"/></g>
+  <g class="qf-plant-stage qf-grown"><path d="M90 196Q83 143 96 84" fill="none" stroke="#879d5b" stroke-width="5" stroke-linecap="round"/><g fill="#8fa760"><path d="M89 168Q49 168 43 140Q74 131 89 168M90 148Q107 117 139 121Q139 151 90 148M93 124Q63 121 61 99Q84 91 93 124M95 100Q104 79 121 84Q121 102 95 100"/></g><path d="m51 145 38 23m1-20 40-21m-62-22 25 19m2-24 20-12" stroke="#c0c98b" stroke-width="1.3" fill="none"/></g>
+  <g class="qf-plant-stage qf-bloom"><path d="M90 196Q82 126 94 61" fill="none" stroke="#879d5b" stroke-width="5" stroke-linecap="round"/><g fill="#8fa760"><path d="M89 168Q49 168 43 140Q74 131 89 168M90 148Q107 117 139 121Q139 151 90 148M91 116Q60 113 60 91Q83 88 91 116M93 100Q107 79 124 86Q123 105 93 100"/></g><g class="qf-petals" fill="#eee1b8" stroke="#d6c795" stroke-width=".6"><ellipse cx="94" cy="44" rx="11" ry="20"/><ellipse cx="94" cy="44" rx="11" ry="20" transform="rotate(72 94 62)"/><ellipse cx="94" cy="44" rx="11" ry="20" transform="rotate(144 94 62)"/><ellipse cx="94" cy="44" rx="11" ry="20" transform="rotate(216 94 62)"/><ellipse cx="94" cy="44" rx="11" ry="20" transform="rotate(288 94 62)"/><circle cx="94" cy="62" r="9" fill="#c8a45f"/></g></g>
+ </svg>
+</div>
+          <span class="qf-stone qf-stone-one" aria-hidden="true"></span><span class="qf-stone qf-stone-two" aria-hidden="true"></span>
+          <span class="qf-leaf" aria-hidden="true"></span>
+        </div>
+        <figcaption><span class="qf-garden-line" aria-hidden="true"></span><h3 id="forest-garden-label">Khu vườn bé nhỏ của bạn</h3><div class="qf-garden-status" role="status" aria-live="polite" aria-atomic="true"><p id="forest-stage">Sẵn sàng gieo mầm</p><p id="forest-quote">Một chút đất. Một chút nắng.</p><p id="forest-garden-description">Gieo một hạt khi bạn sẵn sàng.</p><p id="forest-storage-note"></p></div></figcaption>
+        <div class="qf-garden-actions" role="group" aria-label="Chăm sóc cây của bạn" aria-describedby="forest-garden-description">
+          <button type="button" data-garden-action="plant">Gieo hạt</button>
+          <button type="button" data-garden-action="water" disabled>Tưới nước</button>
+          <button type="button" data-garden-action="sunlight" disabled>Đón nắng</button>
+        </div>
+        <button id="forest-restart" type="button" hidden>Trồng khu vườn mới</button>
+      </figure>
+      <footer class="qf-footer"><span>Rừng yên</span><span>Thế giới có thể đợi.</span></footer>
+    </div>
+  </section>
+
+  <section id="sea-scene" class="sea-scene" aria-label="Bên biển — xếp vỏ sò" aria-hidden="true" inert>
+    <button id="sea-back" class="quiet-back" type="button" aria-label="Trở về chọn nơi">← <span>trở về</span></button>
+    <div class="sea-world">
+      <div class="sea-sun" aria-hidden="true"></div><div class="sea-cloud" aria-hidden="true"></div>
+      <div class="sea-reflection" aria-hidden="true"></div><div class="sea-wave" aria-hidden="true"></div><div class="sea-wave second" aria-hidden="true"></div>
+      <div class="sea-grain" aria-hidden="true"></div>
+      <header class="sea-intro"><p class="sea-eyebrow">một góc biển, dành riêng cho bạn</p><h2>Bên biển</h2><p>Gió mặn. Chân trần. Chẳng cần chứng minh điều gì.</p></header>
+      <div id="sea-tray" class="sea-tray" role="group" aria-label="Vỏ sò sóng mang đến"><span class="sea-tray-label">QUÀ NHỎ TỪ BIỂN</span></div>
+      <p id="sea-help" class="sea-instruction">Kéo vỏ sò lên cát — hoặc chọn một chiếc, rồi chạm vào cát.</p>
+      <div class="sea-draw-tools" role="group" aria-label="Công cụ trang trí cát">
+        <button id="sea-draw-mode" type="button" aria-pressed="true">✎ Vẽ lên cát</button>
+        <button id="sea-shell-mode" type="button" aria-pressed="false">Xếp vỏ sò</button>
+        <button id="sea-undo" type="button" disabled>Hoàn tác nét</button>
+        <button id="sea-clear-drawing" type="button" disabled>Xóa nét vẽ</button>
+      </div>
+      <div id="sea-play" class="sea-play" tabindex="0" role="group" aria-label="Bãi cát xếp vỏ sò" aria-describedby="sea-help"><svg id="sea-ink" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg><span class="sea-play-label">vẽ một điều bé xinh, rồi thêm những vỏ sò</span></div>
+      <div id="sea-crab" class="sea-crab" aria-hidden="true"><svg viewBox="0 0 100 70"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M30 42 16 40 8 46M30 48 15 51 10 59M70 42 84 40 92 46M70 48 85 51 90 59"/><g class="crab-claw"><path d="M30 38 19 24M70 38 81 24"/><path d="M19 24C3 22 5 5 10 4L17 15 22 5C33 13 27 23 19 24M81 24C97 22 95 5 90 4L83 15 78 5C67 13 73 23 81 24" fill="currentColor"/></g><ellipse cx="50" cy="43" rx="23" ry="17" fill="currentColor"/><path d="M40 30 38 21M60 30 62 21"/></g><g fill="#f6e7cf"><circle cx="38" cy="21" r="5"/><circle cx="62" cy="21" r="5"/></g><g fill="#2c3836"><circle cx="39" cy="21" r="2"/><circle cx="61" cy="21" r="2"/></g><path d="M44 45Q50 51 56 45" stroke="#f6e7cf" fill="none" stroke-width="2"/></svg></div>
+      <div class="sea-tools"><button id="sea-reset" type="button">Một đợt sóng mới</button><button id="sea-save" type="button" disabled>Lưu khoảnh khắc ↓</button></div>
+      <div class="sea-message" role="status" aria-live="polite"><span id="sea-message">Không có cách xếp sai. Cứ thử thôi.</span><small id="sea-count">không tính điểm · không cần vội</small></div>
+    </div>
+  </section>
+
+
+  <!-- Scene 3: The Quiet Room at Night -->
+  <section id="room-scene" class="room-scene rain-room" aria-labelledby="rain-heading" aria-hidden="true" inert>
+    <nav class="room-nav" aria-label="Điều hướng phòng mưa">
+      <button id="escape-again" class="room-nav-btn" type="button" aria-label="Quay lại chọn nơi">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.5" fill="none" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>trở về</span>
       </button>
-      <div class="room-scene-title">Somewhere Rainy</div>
-    </div>
+    </nav>
+    <div class="rr-layout">
+      <div class="rr-copy">
+        <p class="rr-kicker">Một căn phòng nhỏ cho những ngày mưa.</p>
+        <h2 id="rain-heading">Ở lại một chút nhé.</h2>
+        <p class="rr-subtitle">Cơn mưa có thể đợi.<br>Thế giới cũng vậy.</p>
+        <div class="rr-divider" aria-hidden="true"></div>
+        <p class="rr-invitation">Chạm vào một giọt mưa.</p>
+        <p class="rr-caption">Để mưa đàn cho bạn một khúc nhạc.</p>
+        <div class="rr-piano-controls">
+          <p id="rain-piano-status" role="status" aria-live="polite">Bật âm thanh ở góc trên để nghe piano.</p>
+          <label for="rain-piano-volume">Piano <span id="rain-piano-volume-value">60%</span></label>
+          <input id="rain-piano-volume" type="range" min="0" max="100" value="60" aria-label="Âm lượng piano giọt mưa">
+          <button id="rain-guide" type="button" aria-pressed="false" aria-describedby="rain-guide-progress">Tập một câu nhạc</button>
+          <p id="rain-guide-progress" aria-live="polite"></p>
+          <p class="rr-piano-tip">Có thể giảm nhạc nền trong bảng âm thanh để nghe rõ tiếng đàn.</p>
+        </div>
+      </div>
+      <figure class="rr-room">
+        <div class="rr-illustration">
+        <svg class="rr-art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760" role="img" aria-labelledby="rr-title rr-desc">
+ <title id="rr-title">Căn phòng nhỏ cho ngày mưa</title>
+ <desc id="rr-desc">Ô cửa mưa xanh xám, rèm xanh lá, đèn vàng ấm, cuốn sách mở và tách trà trên bàn gỗ.</desc>
+ <defs>
+  <linearGradient id="rr-sky" x2="0" y2="1"><stop stop-color="#526875"/><stop offset="1" stop-color="#9caba9"/></linearGradient>
+  <linearGradient id="rr-wall" x2="1" y2="0"><stop stop-color="#d9d3c3"/><stop offset="1" stop-color="#ece1cb"/></linearGradient>
+  <clipPath id="rr-glass"><rect x="195" y="92" width="534" height="438"/></clipPath>
+  <pattern id="rr-paper" width="7" height="9" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".5" fill="#726d5d" opacity=".1"/></pattern>
+ </defs>
+ <rect width="900" height="760" fill="url(#rr-wall)"/>
+ <path d="M0 604H900V760H0" fill="#c6bdab"/>
+ <path d="M0 604H900" stroke="#afa48c" stroke-width="2"/>
+ <rect width="900" height="760" fill="url(#rr-paper)"/>
+ <path d="M698 448 876 445 900 641 601 641Z" fill="#f0d6a1" opacity=".45"/>
+ <!-- Deep wooden window reveal, cream-painted frame, and cool outside air. -->
+ <rect x="174" y="73" width="576" height="479" fill="#9a927e"/>
+ <rect x="187" y="83" width="550" height="456" fill="#e9e2d2"/>
+ <rect x="195" y="92" width="534" height="438" fill="url(#rr-sky)"/>
+ <g clip-path="url(#rr-glass)">
+  <g fill="#607777" opacity=".45">
+   <path d="M181 476 253 405 312 445 380 373 470 447 569 394 675 441 753 388V540H181Z"/>
+   <path d="M186 502 273 461 379 486 510 442 636 488 735 453V540H186Z" fill="#778c84"/>
+  </g>
+  <g fill="#546969" opacity=".55"><path d="M275 549V390l-38 70h24l-37 54h38v35M622 548V366l-35 69h23l-41 62h42v51M662 548V411l-23 46h15l-28 44h28v47"/></g>
+  <path d="M486 525V467h50v58" fill="#7e8580"/><path d="m479 467 32-25 32 25" fill="#5e6b6c"/>
+  <rect x="501" y="481" width="11" height="17" fill="#dbc292" opacity=".8"/>
+  <g stroke="#e5ece7" stroke-width="1.3" opacity=".48" class="rr-rain">
+   <path d="m220 96-7 49m46 2-6 44m44-113-7 55m46 34-8 57m49-125-7 50m50 19-7 45m44-124-6 43m49 20-7 52m49-3-6 41m42-103-6 45m49 24-6 50m44-124-7 52m43 19-7 48"/>
+   <path d="m215 252-6 39m52 26-7 53m43-114-6 43m52 34-8 53m44-124-7 52m48 30-6 45m52-114-7 43m43 31-6 49m46-120-6 44m46 32-7 46m44-107-7 43m40 21-5 49"/>
+   <path d="m221 425-7 48m49 22-6 42m45-114-7 42m51 24-6 44m44-111-5 48m43 20-7 46m51-113-6 47m48 22-7 39m45-111-6 46m45 26-7 45m45-113-6 45m40 20-7 44"/>
+  </g>
+  <g fill="#dae5e1" opacity=".6"><ellipse cx="332" cy="192" rx="2.8" ry="5"/><ellipse cx="590" cy="265" rx="3" ry="6"/><ellipse cx="426" cy="387" rx="2.5" ry="4.5"/><ellipse cx="659" cy="155" rx="2" ry="4"/><ellipse cx="266" cy="360" rx="2" ry="4"/><ellipse cx="545" cy="450" rx="2.5" ry="4"/></g>
+ </g>
+ <path d="M455 86h14v452h-14Z" fill="#e3dccb"/>
+ <path d="M464 92h5v438h-5Z" fill="#b0aa99"/>
+ <path d="M188 305h548v12H188Z" fill="#e7dfcf"/>
+ <path d="M188 315h548v3H188Z" fill="#aaa797"/>
+ <rect x="163" y="538" width="601" height="16" rx="1" fill="#f1e8d4"/>
+ <path d="M171 554h585l-8 8H179Z" fill="#b2a28b"/>
+ <!-- Quiet linen curtains, drawn with broad fabric folds rather than glow. -->
+ <path d="M128 65H798" stroke="#766b56" stroke-width="6" stroke-linecap="round"/>
+ <g class="rr-curtain rr-curtain-left">
+  <path d="M145 70H258C254 208 213 326 212 463L211 569Q179 558 145 574Z" fill="#7d8b73"/>
+  <path d="M160 73C174 231 164 400 160 563M193 73C201 230 182 423 185 563M228 73C219 236 202 392 204 555" stroke="#64735f" stroke-width="11" fill="none" opacity=".5"/>
+  <path d="M151 74C163 235 149 411 151 562M207 74C207 222 189 383 194 558M247 73C231 210 213 292 211 381" stroke="#a5b098" stroke-width="5" fill="none" opacity=".55"/>
+ </g>
+ <g class="rr-curtain rr-curtain-right">
+  <path d="M670 70H786V573Q748 558 715 568C718 397 676 265 670 70Z" fill="#87947b"/>
+  <path d="M688 74C698 248 734 410 728 558M722 74C716 229 752 405 752 562M764 74C749 245 773 401 774 562" stroke="#66765f" stroke-width="11" fill="none" opacity=".45"/>
+  <path d="M700 74C705 223 737 435 737 559M746 74C734 266 766 434 761 562M780 74C766 230 784 420 782 560" stroke="#b0b89e" stroke-width="5" fill="none" opacity=".5"/>
+ </g>
+ <!-- Wood desktop and a pool of warm lamplight. -->
+ <path d="M57 622 852 606 897 664 25 684Z" fill="#b18c64"/>
+ <path d="M25 684 897 664v17L25 703Z" fill="#88684c"/>
+ <path d="m59 646 778-18M117 670l699-20" stroke="#d0ad80" stroke-width="2" opacity=".55"/>
+ <path d="m72 700-4 60h19l12-60M834 684l15 76h20l-7-76" fill="#7d6049"/>
+ <ellipse cx="746" cy="642" rx="119" ry="20" fill="#dec08b" opacity=".45"/>
+ <!-- A linen-shaded reading lamp. -->
+ <ellipse cx="777" cy="629" rx="42" ry="9" fill="#76624b"/><ellipse cx="777" cy="625" rx="37" ry="8" fill="#9f865f"/>
+ <path d="M777 620V442" stroke="#91764d" stroke-width="8"/>
+ <path d="M780 618V442" stroke="#c7ac77" stroke-width="2"/>
+ <path d="M735 352h84l36 100H701Z" fill="#d8b984"/>
+ <path d="M748 354h57l20 95H727Z" fill="#edd3a0"/>
+ <path d="M735 352h84M701 452h154" stroke="#b4976e" stroke-width="3"/>
+ <ellipse cx="778" cy="452" rx="76" ry="7" fill="#f2d7a3"/>
+ <!-- Book, folded linen, and tea. -->
+ <path d="m247 632 173-8 57 45-183 10Z" fill="#d7cbb5"/>
+ <g class="rr-book-art"><path d="m280 615 77-8 61 14 64 37-85-6-70 13Z" fill="#827a62"/>
+  <path d="m285 610 72-7 61 14 57 35-79-6-67 12Z" fill="#eee4cf"/><path d="m357 604 39 42" stroke="#b9ac93" stroke-width="2"/>
+  <g stroke="#b9ac93" stroke-width="1.2"><path d="m302 618 48-4m-41 10 49-4m-40 10 47-4m-39 11 47-4m13-14 35 10m-28-3 36 10m-28-3 35 10"/></g>
+  <path d="m358 606 15 28 6-2-18-26" fill="#919c7c"/>
+ </g>
+ <ellipse cx="575" cy="642" rx="48" ry="11" fill="#97836b" opacity=".28"/><ellipse cx="575" cy="635" rx="42" ry="10" fill="#e8ddc4"/>
+ <path d="M601 594c38-10 31 37-1 29" fill="none" stroke="#eee4cd" stroke-width="8"/>
+ <path d="M546 589h58l-5 35q-24 19-48 0Z" fill="#ede1c8"/>
+ <ellipse cx="575" cy="590" rx="29" ry="7" fill="#f5ead2"/><ellipse cx="575" cy="590" rx="24" ry="4" fill="#a37e4e"/>
+ <g class="rr-steam" stroke="#f5eee0" stroke-width="2" fill="none" opacity=".7"><path d="M565 575c-14-15 11-18 0-33M580 574c14-17-10-19 2-36"/></g>
+ <path d="m104 641 71-4 20 18-73 5Z" fill="#e9dfc9"/><path d="m107 642 45 8 23-12" stroke="#c7b99c" fill="none"/>
+</svg>
 
-    <!-- The Intimate Desk Still-Life Stage -->
-    <div class="room-stage">
-      <!-- Background Windowpane (Interactive Animation) -->
-      <div class="room-window-backdrop interactive-window" id="interactive-window" role="button" tabindex="0" aria-label="Chạm vào ô kính ngắm mưa" title="Nhấp để lau ô kính">
-        <!-- Structural Window Mullions -->
-        <div class="window-mullion horizontal"></div>
-        <div class="window-mullion vertical"></div>
+        <div class="rr-piano" role="group" aria-label="Piano giọt mưa — Đô trưởng, phím 1 đến 8"><button type="button" class="rr-note" data-rain-note="0" aria-label="Đô, phím 1" aria-keyshortcuts="1"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Đô<small>1</small></span></button>
+<button type="button" class="rr-note" data-rain-note="1" aria-label="Rê, phím 2" aria-keyshortcuts="2"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Rê<small>2</small></span></button>
+<button type="button" class="rr-note" data-rain-note="2" aria-label="Mi, phím 3" aria-keyshortcuts="3"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Mi<small>3</small></span></button>
+<button type="button" class="rr-note" data-rain-note="3" aria-label="Fa, phím 4" aria-keyshortcuts="4"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Fa<small>4</small></span></button>
+<button type="button" class="rr-note" data-rain-note="4" aria-label="Sol, phím 5" aria-keyshortcuts="5"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Sol<small>5</small></span></button>
+<button type="button" class="rr-note" data-rain-note="5" aria-label="La, phím 6" aria-keyshortcuts="6"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>La<small>6</small></span></button>
+<button type="button" class="rr-note" data-rain-note="6" aria-label="Si, phím 7" aria-keyshortcuts="7"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Si<small>7</small></span></button>
+<button type="button" class="rr-note" data-rain-note="7" aria-label="Đô cao, phím 8" aria-keyshortcuts="8"><svg viewBox="0 0 40 50" aria-hidden="true"><path d="M20 3C18 10 6 22 6 31a14 14 0 0 0 28 0C34 22 22 10 20 3Z"/><path d="M12 31q0 8 8 9" class="rr-drop-shine"/></svg><span>Đô<small>8</small></span></button></div>
         
-        <!-- Cold Blue Ambient Night Glow -->
-        <div class="window-glass-glow"></div>
-
-        <!-- Condensation & Wiped Circle Layer -->
-        <div class="window-condensation-overlay">
-          <!-- Distant warm light revealed through the wiped circle -->
-          <div class="distant-warm-beacon" aria-hidden="true">
-            <div class="beacon-core"></div>
-            <div class="beacon-bloom"></div>
-          </div>
-          <!-- Wiped Circle Aperture -->
-          <div class="window-wipe-circle" aria-hidden="true"></div>
+        <button id="interactive-book" class="rr-book-button" type="button" aria-label="Chạm vào cuốn sách"></button>
+        <span id="book-caption" class="rr-book-note" role="status" aria-live="polite">còn một trang, cứ để mai...</span>
         </div>
-
-        <!-- Hover / Idle Prompt -->
-        <div class="window-interact-prompt">
-          <span>chạm vào ô kính</span>
-        </div>
-
-        <!-- Transient Cinematic Whisper Caption (Fades away after 2.5s) -->
-        <div class="window-whisper-caption" id="window-caption" aria-live="polite">
-          <span>ngoài kia, một đốm sáng xa xôi...</span>
-        </div>
-      </div>
-
-      <!-- The Wooden Desk Surface -->
-      <div class="desk-surface">
-        <div class="desk-wood-grain"></div>
-        <div class="desk-lamp-pool"></div>
-
-        <!-- 1. The Vintage Amber Lamp -->
-        <div class="desk-item desk-lamp" id="desk-lamp" title="Chiếc đèn bàn bằng đồng tỏa sáng ấm áp">
-          <div class="lamp-light-cone"></div>
-          <svg class="lamp-svg" viewBox="0 0 160 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Lamp Base -->
-            <ellipse cx="80" cy="245" rx="38" ry="10" fill="#1c1612" stroke="#5c4530" stroke-width="1.5"/>
-            <ellipse cx="80" cy="242" rx="30" ry="7" fill="#2d221a" stroke="#7a5d41" stroke-width="1"/>
-            <!-- Stem -->
-            <path d="M80 240 L80 115" stroke="#684f37" stroke-width="4.5" stroke-linecap="round"/>
-            <path d="M80 115 Q80 75 92 68" stroke="#7a5d41" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="80" cy="180" r="4.5" fill="#a07d58"/>
-            <circle cx="80" cy="120" r="5" fill="#a07d58"/>
-            <!-- Shade Bracket -->
-            <path d="M85 70 L98 62" stroke="#8c6a49" stroke-width="3"/>
-            <!-- Lampshade (Warm amber fabric/parchment) -->
-            <path d="M70 70 L126 70 L146 128 L50 128 Z" fill="#b8783d" opacity="0.9"/>
-            <path d="M70 70 L126 70 L146 128 L50 128 Z" fill="url(#lampShadeGrad)"/>
-            <ellipse cx="98" cy="128" rx="48" ry="10" fill="#e29b52" opacity="0.8"/>
-            <ellipse cx="98" cy="70" rx="28" ry="6" fill="#7a4e27"/>
-            <!-- Inner Bulb Glow -->
-            <ellipse cx="98" cy="122" rx="16" ry="6" fill="#fff2df"/>
-            <defs>
-              <linearGradient id="lampShadeGrad" x1="50" y1="70" x2="146" y2="128" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffe6b8" stop-opacity="0.6"/>
-                <stop offset="45%" stop-color="#d98941" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#6e3e18" stop-opacity="0.95"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        <!-- 2. Vase of Dried Flowers -->
-        <div class="desk-item vase-container" title="Bình gốm mộc cắm hoa cỏ khô">
-          <svg class="vase-svg" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Dried Botanical Stems -->
-            <g class="dried-stems">
-              <path d="M60 130 Q50 65 32 18" stroke="#786c5c" stroke-width="1.2" stroke-linecap="round"/>
-              <path d="M60 130 Q65 70 78 22" stroke="#877a68" stroke-width="1.4" stroke-linecap="round"/>
-              <path d="M60 130 Q58 50 56 10" stroke="#685d4f" stroke-width="1.3" stroke-linecap="round"/>
-              <path d="M60 130 Q72 85 92 45" stroke="#7d7160" stroke-width="1.2" stroke-linecap="round"/>
-              <path d="M60 130 Q45 80 24 50" stroke="#6e6253" stroke-width="1.2" stroke-linecap="round"/>
-              
-              <ellipse cx="32" cy="18" rx="2.5" ry="4.5" transform="rotate(-25 32 18)" fill="#8e8172"/>
-              <ellipse cx="36" cy="28" rx="2.2" ry="4" transform="rotate(-20 36 28)" fill="#a19383"/>
-              <ellipse cx="40" cy="40" rx="2" ry="3.5" transform="rotate(-15 40 40)" fill="#786a5a"/>
-              <ellipse cx="56" cy="10" rx="2.5" ry="5" fill="#a89a8a"/>
-              <ellipse cx="56" cy="22" rx="2.4" ry="4.5" fill="#938474"/>
-              <ellipse cx="57" cy="34" rx="2.2" ry="4" fill="#7d6f60"/>
-              <ellipse cx="78" cy="22" rx="2.5" ry="4.5" transform="rotate(22 78 22)" fill="#9e9080"/>
-              <ellipse cx="74" cy="34" rx="2.3" ry="4" transform="rotate(18 74 34)" fill="#b3a595"/>
-              <ellipse cx="70" cy="46" rx="2.1" ry="3.5" transform="rotate(12 70 46)" fill="#857767"/>
-              <ellipse cx="92" cy="45" rx="2.2" ry="4" transform="rotate(35 92 45)" fill="#7f7161"/>
-              <ellipse cx="86" cy="56" rx="2" ry="3.5" transform="rotate(28 86 56)" fill="#968878"/>
-              <ellipse cx="24" cy="50" rx="2.2" ry="4" transform="rotate(-35 24 50)" fill="#776a5b"/>
-            </g>
-
-            <!-- Ceramic Vase Body -->
-            <ellipse cx="60" cy="210" rx="28" ry="7" fill="#080706" opacity="0.6"/>
-            <path d="M48 115 C48 110 72 110 72 115 L70 135 C88 152 90 195 82 206 C76 212 44 212 38 206 C30 195 32 152 50 135 Z" 
-                  fill="#2b241e" stroke="#4a3e35" stroke-width="1"/>
-            <ellipse cx="60" cy="115" rx="12" ry="3" fill="#3a3028" stroke="#5a4d42" stroke-width="0.8"/>
-            <path d="M42 165 C41 185 45 198 52 204" stroke="#685647" stroke-width="1.8" stroke-linecap="round" opacity="0.65"/>
-          </svg>
-        </div>
-
-        <!-- 3. The Open Book (Interactive 3D Page Turn & Pressed Flower) -->
-        <div class="desk-item open-book interactive-book" id="interactive-book" role="button" tabindex="0" aria-label="Lần giở trang sách" title="Nhấp để lật trang sách">
-          <div class="book-shadow"></div>
-          <div class="book-spine"></div>
-          
-          <!-- Left Page (Base) -->
-          <div class="book-page page-left">
-            <div class="page-lines">
-              <span class="line-sm w-85"></span>
-              <span class="line-sm w-90"></span>
-              <span class="line-sm w-75"></span>
-              <span class="line-sm w-95"></span>
-              <span class="line-sm w-70"></span>
-              <span class="line-sm w-80"></span>
-              <span class="line-sm w-60"></span>
-            </div>
-            <span class="page-num" id="page-num-left">48</span>
-          </div>
-
-          <!-- 3D Turning Sheet 1 -->
-          <div class="flip-sheet sheet-1" aria-hidden="true">
-            <div class="flip-face front">
-              <div class="page-lines">
-                <span class="line-sm w-90"></span>
-                <span class="line-sm w-80"></span>
-                <span class="line-sm w-85"></span>
-                <span class="line-sm w-70"></span>
-              </div>
-            </div>
-            <div class="flip-face back">
-              <div class="page-lines">
-                <span class="line-sm w-75"></span>
-                <span class="line-sm w-85"></span>
-                <span class="line-sm w-65"></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 3D Turning Sheet 2 -->
-          <div class="flip-sheet sheet-2" aria-hidden="true">
-            <div class="flip-face front">
-              <div class="page-lines">
-                <span class="line-sm w-85"></span>
-                <span class="line-sm w-92"></span>
-                <span class="line-sm w-65"></span>
-              </div>
-            </div>
-            <div class="flip-face back">
-              <div class="page-lines">
-                <span class="line-sm w-80"></span>
-                <span class="line-sm w-70"></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right Page (Revealed Page with Pressed Flower) -->
-          <div class="book-page page-right">
-            <!-- Normal Lines (Before turning) -->
-            <div class="page-lines default-lines">
-              <span class="line-sm w-90"></span>
-              <span class="line-sm w-80"></span>
-              <span class="line-sm w-92"></span>
-              <span class="line-sm w-70"></span>
-              <span class="line-sm w-85"></span>
-              <span class="line-sm w-65"></span>
-              <span class="line-sm w-40"></span>
-            </div>
-
-            <!-- Pressed Dried Flower & Memory Fragment (Revealed on turn) -->
-            <div class="pressed-flower-revelation" aria-hidden="true">
-              <svg class="pressed-flower-svg" viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Dried stem -->
-                <path d="M40 100 Q42 65 38 35 Q35 15 40 8" stroke="#806b53" stroke-width="1.2" stroke-linecap="round"/>
-                <path d="M39 60 Q48 48 54 44" stroke="#806b53" stroke-width="0.9" stroke-linecap="round"/>
-                <path d="M40 75 Q32 65 26 62" stroke="#806b53" stroke-width="0.9" stroke-linecap="round"/>
-                <!-- Pressed petals (Vintage parchment-rose tone) -->
-                <ellipse cx="40" cy="8" rx="4.5" ry="7" fill="#a48162" opacity="0.85"/>
-                <ellipse cx="34" cy="11" rx="4" ry="6" transform="rotate(-35 34 11)" fill="#8e6d51" opacity="0.8"/>
-                <ellipse cx="46" cy="11" rx="4" ry="6" transform="rotate(35 46 11)" fill="#b89373" opacity="0.85"/>
-                <ellipse cx="36" cy="17" rx="3.5" ry="5.5" transform="rotate(-60 36 17)" fill="#7d5f45" opacity="0.75"/>
-                <ellipse cx="44" cy="17" rx="3.5" ry="5.5" transform="rotate(60 44 17)" fill="#9c7a5c" opacity="0.8"/>
-                <circle cx="40" cy="12" r="2.5" fill="#5a412c"/>
-                <!-- Small dried leaf specks -->
-                <ellipse cx="54" cy="44" rx="2.5" ry="4.5" transform="rotate(25 54 44)" fill="#756149" opacity="0.7"/>
-                <ellipse cx="26" cy="62" rx="2.2" ry="4" transform="rotate(-30 26 62)" fill="#756149" opacity="0.7"/>
-              </svg>
-              <p class="penciled-memory-note">chiều mưa năm ấy...</p>
-            </div>
-
-            <!-- Page Number -->
-            <span class="page-num" id="page-num-right">49</span>
-
-            <!-- Subtle hover prompt -->
-            <div class="book-interact-prompt">
-              <span>lần giở trang sách</span>
-            </div>
-          </div>
-
-          <!-- Transient Cinematic Whisper Caption (Fades away after 2.5s) -->
-          <div class="book-whisper-caption" id="book-caption" aria-live="polite">
-            <span>nhành hoa ép giữa trang sách cũ</span>
-          </div>
-        </div>
-
-        <!-- 4. The Handwritten Letter (Subtle Interactive Focus - Preserved Full Modal) -->
-        <div class="desk-item interactive-letter" id="interactive-letter" role="button" tabindex="0" aria-label="Đọc lá thư tay" title="Nhấp để mở lá thư">
-          <div class="letter-shadow"></div>
-          <div class="letter-sheet">
-            <div class="letter-wax-seal"></div>
-            <div class="letter-postscript">
-              <p class="script-snippet">Nếu đêm nay ngoài kia quá đỗi ồn ào...</p>
-              <div class="letter-faint-lines">
-                <span class="faint-stroke w-80"></span>
-                <span class="faint-stroke w-60"></span>
-              </div>
-            </div>
-            <div class="letter-interact-prompt">
-              <span>mở thư</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Desk Whisper Note -->
-      <div class="room-whisper"><p>Ở đây, không ai cần điều gì từ bạn.</p></div>
-      <div class="room-actions">
-        <button id="stay-here" class="stay-here">Ở LẠI ĐÂY</button>
-        <button id="escape-again-bottom" class="escape-again-bottom">TRỐN ĐI LẦN NỮA</button>
-      </div>
+        <figcaption><span>Góc mưa</span><span>chẳng cần làm gì. chẳng phải đi đâu.</span></figcaption>
+      </figure>
     </div>
+    <footer class="rr-footer">
+      <div class="rr-quote"><p id="rain-quote" aria-live="polite">Ở đây, không ai cần điều gì từ bạn.</p><button id="rain-change-quote" type="button" aria-label="Đổi lời động viên">một lời nhắn khác ↻</button></div>
+      <div class="room-actions">
+        <button id="interactive-letter" type="button" aria-label="Đọc lá thư tay">một lá thư cho bạn</button>
+        <button id="stay-here" type="button" title="Nhấn Esc hoặc chạm nền để hiện lại điều hướng">ở lại đây</button>
+        <button id="escape-again-bottom" type="button">trốn đi lần nữa</button>
+      </div>
+    </footer>
   </section>
 
   <!-- The Only Full Reading Modal: The Comforting Handwritten Letter (Preserved exactly as requested) -->
-  <div id="letter-modal" class="letter-modal memory-modal" aria-hidden="true">
+  <div id="letter-modal" class="letter-modal memory-modal" aria-hidden="true" inert>
     <div class="letter-backdrop modal-backdrop" id="letter-backdrop"></div>
     <div class="letter-paper-wrapper">
       <button id="close-letter-btn" class="close-letter close-memory-btn" aria-label="Gấp lá thư lại">
@@ -402,13 +573,22 @@
   <!-- Soft Transition Curtain -->
   <div id="transition-curtain" class="transition-curtain" aria-hidden="true">
     <div class="curtain-inner">
-      <p class="trans-message">Step inside. Leave the world outside the glass.</p>
+      <p class="trans-message">Bước vào nhé. Để bộn bề bên kia ô cửa.</p>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="assets/js/rain.js"></script>
   <script src="assets/js/audio.js"></script>
+  <script src="assets/js/sea.js"></script>
+  <script src="assets/js/rain-piano.js"></script>
+  <script src="assets/js/forest-garden.js"></script>
+  <script src="assets/js/shop-art.js"></script>
+  <script src="assets/js/street-shops.js"></script>
+  <script src="assets/js/neon-city.js"></script>
+  <script src="assets/js/impossible.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/place-oracle.js"></script>
+  <script src="assets/js/oracle-places.js"></script>
 </body>
 </html>

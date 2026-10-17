@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+let id=0;const frames=new Map();
+const sandbox={window:{},performance:{now:()=>1234},requestAnimationFrame:fn=>{frames.set(++id,fn);return id;},cancelAnimationFrame:n=>frames.delete(n)};
+vm.createContext(sandbox);vm.runInContext(fs.readFileSync('assets/js/rain.js','utf8'),sandbox);
+const proto=sandbox.window.RainSimulation.prototype;
+const rain=Object.create(proto);rain.isRunning=true;rain.animate=()=>{};rain.frameId=sandbox.requestAnimationFrame(rain.animate);
+assert.equal(frames.size,1);rain.setPaused(true);assert.equal(frames.size,0);assert.equal(rain.isRunning,false);
+rain.setPaused(true);assert.equal(frames.size,0);rain.setPaused(false);rain.setPaused(false);assert.equal(frames.size,1);assert.equal(rain.lastTime,1234);
+rain.setPaused(true);assert.equal(frames.size,0);
+console.log('PASS: pause cancels animation; repeated pause/resume never creates duplicate loops; resume resets elapsed time.');

@@ -1,0 +1,9 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+let count=0,resolvePlay,rejectPlay;const doc={hidden:false,addEventListener(){},getElementById(){return {textContent:''}}};
+class Media {constructor(){count++;this.paused=true;}addEventListener(){}pause(){this.paused=true}play(){this.paused=false;return new Promise((a,b)=>{resolvePlay=a;rejectPlay=b})}}
+const ctx={window:{},document:doc,Audio:Media};vm.runInNewContext(fs.readFileSync('assets/js/audio.js','utf8'),ctx);const engine=Object.create(ctx.window.EscapeAudioEngine.prototype);Object.assign(engine,{isPlaying:false,activeTrackId:'city',musicVolume:.5,cityRecording:null,cityPlayPending:false});
+const flush=()=>new Promise(r=>setImmediate(r));
+(async()=>{engine.syncCityRecording();assert.equal(count,0);engine.isPlaying=true;engine.syncCityRecording();engine.syncCityRecording();assert.equal(count,1);assert.equal(engine.cityRecording.volume,.5);engine.isPlaying=false;engine.syncCityRecording();resolvePlay();await flush();assert(engine.cityRecording.paused);
+engine.isPlaying=true;engine.syncCityRecording();resolvePlay();await flush();engine.musicVolume=.2;engine.syncCityRecording();assert.equal(engine.cityRecording.volume,.2);engine.activeTrackId='sea';engine.syncCityRecording();assert(engine.cityRecording.paused);
+engine.activeTrackId='city';engine.musicVolume=0;engine.syncCityRecording();assert(engine.cityRecording.paused);engine.musicVolume=.5;engine.syncCityRecording();rejectPlay(Error('blocked'));await flush();assert(!engine.cityPlayPending);engine.cityRecording.paused=true;engine.syncCityRecording();resolvePlay();await flush();doc.hidden=true;engine.syncCityRecording();assert(engine.cityRecording.paused);
+console.log('PASS MP3 no autoplay, one player, pending-play mute, scene exit, volume/zero, rejection handling and hidden-page pause (mock Audio).');})();

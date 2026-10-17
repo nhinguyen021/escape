@@ -9,13 +9,321 @@
   height: 100%;
   z-index: 1;
   overflow: hidden;
+  background-color: #06080c;
+}
+
+/* Base ambient midnight canvas (near-black, deep velvety slate) */
+.base-ambient-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background: radial-gradient(
-    circle at 50% 40%,
-    #131a26 0%,
-    #0c111a 45%,
-    #070a0e 100%
+    circle at 50% 45%,
+    #0f1520 0%,
+    #090d14 45%,
+    #05070a 100%
+  );
+  z-index: 1;
+  transition: opacity 1.4s var(--ease-poetic, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+/* ==========================================================================
+   Doorway Light Portal (Cinematic Ajar Door Light on ESCAPE hover/focus)
+   ========================================================================== */
+.doorway-portal {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 72vh;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.22;
+  filter: blur(12px);
+  transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: width, opacity, filter;
+}
+
+.doorway-portal .door-slit {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(235, 185, 125, 0.45) 15%,
+    rgba(255, 238, 205, 0.85) 50%,
+    rgba(215, 145, 80, 0.45) 85%,
+    transparent 100%
+  );
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(230, 168, 110, 0.3);
+}
+
+.doorway-portal .door-bloom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(245, 195, 140, 0.4) 0%,
+    rgba(215, 140, 75, 0.16) 45%,
+    transparent 75%
+  );
+  filter: blur(24px);
+  opacity: 0.35;
+  transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+              height 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* When ESCAPE is hovered or focused: Door softly widens like an opening door */
+body:has(#enter-btn:hover) .doorway-portal,
+body:has(#enter-btn:focus-visible) .doorway-portal,
+.doorway-portal.is-open {
+  width: min(340px, 60vw);
+  opacity: 0.85;
+  filter: blur(28px);
+  transform: translateX(-50%) scale(1.04);
+}
+
+body:has(#enter-btn:hover) .doorway-portal .door-bloom,
+body:has(#enter-btn:focus-visible) .doorway-portal .door-bloom,
+.doorway-portal.is-open .door-bloom {
+  width: min(560px, 85vw);
+  height: 520px;
+  opacity: 0.8;
+  filter: blur(48px);
+}
+
+/* ==========================================================================
+   Selection Scene Atmospheres (Dynamic 5 Destination Backgrounds)
+   ========================================================================== */
+.atmosphere-canvas-group {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.theme-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
+  pointer-events: none;
+}
+
+.theme-layer.active {
+  opacity: 1;
+}
+
+/* 1. Rainy: xanh đêm, mưa, ánh đèn vàng */
+.theme-rainy {
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    #0c1524 0%,
+    #070b13 55%,
+    #040609 100%
   );
 }
+
+.theme-rainy .rainy-glow {
+  position: absolute;
+  bottom: -15%;
+  left: -10%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(235, 170, 105, 0.28) 0%,
+    rgba(195, 125, 65, 0.14) 35%,
+    transparent 70%
+  );
+  filter: blur(55px);
+  animation: lampBreathe 9s ease-in-out infinite alternate;
+}
+
+/* 2. Sea: xanh biển, ánh hoàng hôn, chuyển động như sóng */
+.theme-sea {
+  background: radial-gradient(
+    ellipse at 50% 90%,
+    #092638 0%,
+    #061926 45%,
+    #030a11 100%
+  );
+}
+
+.theme-sea .sea-dusk {
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  right: -10%;
+  height: 65vh;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(224, 134, 102, 0.26) 0%,
+    rgba(186, 95, 110, 0.16) 35%,
+    rgba(28, 85, 125, 0.12) 65%,
+    transparent 85%
+  );
+  filter: blur(45px);
+  animation: seaDuskBreathe 12s ease-in-out infinite alternate;
+}
+
+.theme-sea .sea-wave-shimmer {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 82%,
+    rgba(45, 135, 165, 0.16) 0%,
+    transparent 62%
+  );
+  animation: seaWaveUndulation 9s ease-in-out infinite alternate;
+  filter: blur(50px);
+}
+
+/* 3. Quiet: xanh rừng, sương nhẹ */
+.theme-quiet {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    #0d2015 0%,
+    #08130c 55%,
+    #030705 100%
+  );
+}
+
+.theme-quiet .quiet-forest {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70vh;
+  background: radial-gradient(
+    ellipse at 50% 70%,
+    rgba(76, 130, 92, 0.24) 0%,
+    rgba(32, 70, 48, 0.12) 50%,
+    transparent 80%
+  );
+  filter: blur(60px);
+}
+
+.theme-quiet .quiet-mist {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 30% 60%,
+    rgba(180, 215, 190, 0.08) 0%,
+    transparent 65%
+  ), radial-gradient(
+    ellipse at 70% 40%,
+    rgba(155, 205, 180, 0.07) 0%,
+    transparent 65%
+  );
+  filter: blur(42px);
+  animation: quietMistDrift 18s ease-in-out infinite alternate;
+}
+
+/* 4. City: tím xanh, điểm sáng neon tiết chế */
+.theme-city {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    #141128 0%,
+    #0d0b1a 55%,
+    #05040b 100%
+  );
+}
+
+.theme-city .city-twilight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 20% 85%,
+    rgba(215, 140, 75, 0.18) 0%,
+    transparent 45%
+  ), radial-gradient(
+    circle at 80% 30%,
+    rgba(95, 105, 210, 0.18) 0%,
+    transparent 50%
+  );
+  filter: blur(52px);
+}
+
+.theme-city .city-neon-bokeh {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 65% 70%,
+    rgba(235, 95, 125, 0.13) 0%,
+    transparent 35%
+  ), radial-gradient(
+    circle at 35% 45%,
+    rgba(65, 175, 215, 0.11) 0%,
+    transparent 35%
+  );
+  filter: blur(36px);
+  animation: cityBokehPulse 10s ease-in-out infinite alternate;
+}
+
+/* 5. Impossible: tím đêm, ánh sáng mơ hồ và bụi sao */
+.theme-impossible {
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    #1a0f30 0%,
+    #0e071c 55%,
+    #05020c 100%
+  );
+}
+
+.theme-impossible .impossible-nebula {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 35%,
+    rgba(175, 110, 235, 0.2) 0%,
+    rgba(105, 60, 170, 0.12) 45%,
+    transparent 75%
+  );
+  filter: blur(60px);
+  animation: nebulaBreathe 14s ease-in-out infinite alternate;
+}
+
+.theme-impossible .impossible-stardust {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 120px 80px, rgba(235, 210, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 240px 180px, rgba(210, 190, 255, 0.55), transparent),
+    radial-gradient(1.5px 1.5px at 380px 120px, rgba(255, 240, 220, 0.75), transparent),
+    radial-gradient(1px 1px at 520px 290px, rgba(200, 180, 255, 0.6), transparent),
+    radial-gradient(1.2px 1.2px at 700px 90px, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(1px 1px at 850px 240px, rgba(220, 200, 255, 0.55), transparent);
+  background-size: 550px 350px;
+  opacity: 0.5;
+  animation: stardustTwinkle 8s ease-in-out infinite alternate;
+}
+
+/* ==========================================================================
+   Base Atmospheric Layers (Rain Canvas, Mist, Grain, Vignette)
+   ========================================================================== */
 
 /* Canvas for dynamic rain particles and window drips */
 #rain-canvas {
@@ -24,7 +332,8 @@
   width: 100%;
   height: 100%;
   display: block;
-  z-index: 2;
+  z-index: 4;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Warm Interior Reading Lamp / Candle Glow (Contrast against rainy night) */
@@ -45,10 +354,11 @@
     transparent 75%
   );
   filter: blur(50px);
-  z-index: 3;
+  z-index: 5;
   pointer-events: none;
   animation: lampBreathe 9s ease-in-out infinite alternate;
   will-change: transform, opacity;
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
 /* Second subtle warm reflection from bottom-right */
@@ -72,7 +382,7 @@
 .window-mist {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 6;
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 50%,
@@ -110,6 +420,10 @@
   );
 }
 
+/* ==========================================================================
+   Atmospheric Keyframes
+   ========================================================================== */
+
 /* Organic slow lamp breathing */
 @keyframes lampBreathe {
   0% {
@@ -126,6 +440,43 @@
   }
 }
 
+/* Sea atmospheric slow breathing */
+@keyframes seaDuskBreathe {
+  0% { transform: translateY(0) scaleY(1); opacity: 0.85; }
+  100% { transform: translateY(-4%) scaleY(1.08); opacity: 1; }
+}
+
+@keyframes seaWaveUndulation {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2.5%) scale(1.05); }
+  100% { transform: translateY(1.5%) scale(0.98); }
+}
+
+/* Forest mist slow drift */
+@keyframes quietMistDrift {
+  0% { transform: translateX(-3%) scale(1); }
+  100% { transform: translateX(3%) scale(1.05); }
+}
+
+/* City bokeh restrained pulse */
+@keyframes cityBokehPulse {
+  0% { opacity: 0.7; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.03); }
+}
+
+/* Nebula breath */
+@keyframes nebulaBreathe {
+  0% { transform: scale(0.96); opacity: 0.8; }
+  100% { transform: scale(1.04); opacity: 1; }
+}
+
+/* Stardust twinkle */
+@keyframes stardustTwinkle {
+  0% { opacity: 0.35; }
+  50% { opacity: 0.65; }
+  100% { opacity: 0.4; }
+}
+
 /* Subtle frame jitter for analog film texture */
 @keyframes grainFlicker {
   0% { transform: translate(0, 0); }
@@ -139,7 +490,13 @@
 /* High contrast / reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .warm-lamp-glow,
-  .film-grain {
+  .film-grain,
+  .theme-sea .sea-dusk,
+  .theme-sea .sea-wave-shimmer,
+  .theme-quiet .quiet-mist,
+  .theme-city .city-neon-bokeh,
+  .theme-impossible .impossible-nebula,
+  .theme-impossible .impossible-stardust {
     animation: none !important;
   }
 }
