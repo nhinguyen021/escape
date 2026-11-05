@@ -132,6 +132,7 @@
         this.#persistenceAvailable = true;
         return true;
       } catch (error) {
+        this.#stage = previousStage;
         console.error('[Forest Garden] Save failed:', error);
         this.#persistenceAvailable = false;
         throw error;
