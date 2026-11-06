@@ -72,6 +72,18 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function setScene(targetScene, focusTarget) {
     currentScene = targetScene;
+        // Remember Forest Garden navigation without using localStorage.
+    if (targetScene === forest) {
+      if (window.location.hash !== '#forest') {
+        window.history.replaceState(null, '', '#forest');
+      }
+    } else if (window.location.hash === '#forest') {
+      window.history.replaceState(
+        null,
+        '',
+        window.location.pathname + window.location.search
+      );
+    }
     syncBackgroundRain();
     rainPiano?.setActive(targetScene === room);
     document.body.classList.toggle('in-subscene', targetScene !== hero);
@@ -134,8 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }, reduced ? 0 : 1000);
   }
 
-  // Initial State: Only hero is active & interactive
-  setScene(hero);
+ // Restore Forest Garden after refresh when URL hash is #forest.
+const initialScene =
+  window.location.hash === '#forest' && forest ? forest : hero;
+setScene(initialScene);
   if (letterModal) {
     letterModal.inert = true;
     letterModal.setAttribute('aria-hidden', 'true');
